@@ -2,7 +2,7 @@
 
 namespace VanillaPlus {
 
-    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "1.0.2")]
+    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "1.1.0")]
     public class VPLauncher : BaseUnityPlugin {
 
         public VPLauncher() { VPBinder.UnitGlad(); }
