@@ -41,6 +41,8 @@ public class FloatyPhysics : MonoBehaviour
 
 	private bool dead;
 
+	private bool hasHalvedForce;
+
 	public bool useWings = true;
 
 	public bool useWingsInPlacement = true;
@@ -111,6 +113,19 @@ public class FloatyPhysics : MonoBehaviour
 		{
 			return;
 		}
+
+		if (!data.legLeft.gameObject.activeSelf && !data.legRight.gameObject.activeSelf)
+		{
+			return;
+		}
+
+		if (!hasHalvedForce && (!data.legLeft.gameObject.activeSelf && data.legRight.gameObject.activeSelf) ||
+		    (data.legLeft.gameObject.activeSelf && !data.legRight.gameObject.activeSelf))
+		{
+			hasHalvedForce = true;
+			flightForce *= 0.3f;
+		}
+		
 		if ((bool)data && data.Dead)
 		{
 			if (data.allRigs.AllRigs[0] != null)

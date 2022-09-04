@@ -460,6 +460,7 @@
     <ItemGroup>
         <Compile Include="MasterBolt.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
+        <Compile Include="UnitSkeleton.cs" />
         <Compile Include="VPBinder.cs" />
         <Compile Include="VPLauncher.cs" />
         <Compile Include="VPMain.cs" />

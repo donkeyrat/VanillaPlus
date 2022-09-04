@@ -15,7 +15,7 @@ namespace VanillaPlus {
             AssetPool.hideFlags = HideFlags.HideAndDontSave;
             AssetPool.SetActive(false);
             var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
-            var unitList = db.UnitList.ToList();
+            unitList = db.UnitList.ToList();
             unitsToUpgrade = new List<IDatabaseEntity>(unitList.FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling") || ((UnitBlueprint)x).UnitBase.name.Contains("Blackbeard"))));
             unitsToNotUpgrade = new List<UnitBlueprint>();
             foreach (var unit in combatUpgrade.LoadAllAssets<UnitBlueprint>())
@@ -26,14 +26,20 @@ namespace VanillaPlus {
                 }
 
                 var find = db.UnitBaseList.ToList().Find(x => x.name == unit.UnitBase.name);
+                var find2 = db.UnitBaseList.ToList().Find(x => x.name.Contains("Humanoid_1 Prefabs_VB"));
                 if (unit.UnitBase && find)
                 {
                     unit.UnitBase = find;
                 }
+                else if (unit.UnitBase && unit.UnitBase.name.Contains("2.0") && find2)
+                {
+                    unit.UnitBase = find2;
+                }
             }
+
             foreach (var b in db.UnitBaseList)
             {
-                if (b != null && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy") || b.name.Contains("Halfling") || b.name.Contains("Blackbeard")))
+                if (b != null && !b.name.Contains("_2.") && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy") || b.name.Contains("Halfling") || b.name.Contains("Blackbeard")))
                 {
                     b.GetComponentInChildren<StandingHandler>().enabled = false;
                     b.GetComponentInChildren<Balance>().allowedLegAngle = 125f;
@@ -69,8 +75,13 @@ namespace VanillaPlus {
                 var foundUnit = upgradedUnits.Find(x => x.name == unit.name + "_2.0");
                 if (foundUnit)
                 {
-                    DeepCopyUnit(unit, foundUnit);
-                    unitsToNotUpgrade.Add(unit);
+                    var unitSkeleton = new UnitSkeleton();
+                    unitSkeleton.CopyUnitOntoThis(foundUnit);
+                    unitSkeletons.Add(unit.Entity.GUID, unitSkeleton);
+                    
+                    var ogSkeleton = new UnitSkeleton();
+                    ogSkeleton.CopyUnitOntoThis(unit);
+                    originalUnitSkeletons.Add(unit.Entity.GUID, ogSkeleton);
                 }
             }
 
@@ -119,6 +130,7 @@ namespace VanillaPlus {
                 name = "Bullshit: The Reboot",
                 hideFlags = HideFlags.HideAndDontSave
             }.AddComponent<VPSecretManager>();
+            
             var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek_1"));
             if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
             var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
@@ -131,34 +143,71 @@ namespace VanillaPlus {
             if (warGlaive) { warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
             var club = db.WeaponList.ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
             if (club) { club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+
+            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
+                "Enables/disables unit modifications.", "BUG",
+                new string[] { "Enable unit modifications", "Disable unit modifications" });
+            toggleUpgrades.OnValueChanged += ToggleUpgrades;
+            ToggleUpgrades(toggleUpgrades.defaultValue);
         }
 
-        public void DeepCopyUnit(UnitBlueprint unit1, UnitBlueprint unit2)
+        public void ToggleUpgrades(int value)
         {
-            unit1.health = unit2.health;
-            unit1.m_props = unit2.m_props;
-            unit1.animationMultiplier = unit2.animationMultiplier;
-            unit1.balanceMultiplier = unit2.balanceMultiplier;
-            unit1.costTweak = unit2.costTweak;
-            unit1.damageMultiplier = unit2.damageMultiplier;
-            unit1.dragMultiplier = unit2.dragMultiplier;
-            unit1.forceCost = unit2.forceCost;
-            unit1.m_propData = unit2.m_propData;
-            unit1.massMultiplier = unit2.massMultiplier;
-            unit1.sizeMultiplier = unit2.sizeMultiplier;
-            unit1.scaleWeapons = unit2.scaleWeapons;
-            unit1.stepMultiplier = unit2.stepMultiplier;
-            unit1.turningData = unit2.turningData;
-            unit1.turnSpeed = unit2.turnSpeed;
-            unit1.balanceForceMultiplier = unit2.balanceForceMultiplier;
-            unit1.movementSpeedMuiltiplier = unit2.movementSpeedMuiltiplier;
-            unit1.LeftWeapon = unit2.LeftWeapon;
-            unit1.RightWeapon = unit2.RightWeapon;
-            unit1.objectsToSpawnAsChildren = unit2.objectsToSpawnAsChildren;
-            unit1.minSizeRandom = unit2.minSizeRandom;
-            unit1.maxSizeRandom = unit2.maxSizeRandom;
-            unit1.UnitBase = unit2.UnitBase;
-            if (unit2.Entity.Name != "") unit1.Entity.Name = unit2.Entity.Name;
+            if (value == 0)
+            {
+                foreach (var u in unitList)
+                {
+                    var unit = (UnitBlueprint)u;
+                    if (unit != null && unitSkeletons.ContainsKey(unit.Entity.GUID))
+                    {
+                        unitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var u in unitList)
+                {
+                    var unit = (UnitBlueprint)u;
+                    if (unit != null && originalUnitSkeletons.ContainsKey(unit.Entity.GUID))
+                    {
+                        originalUnitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                    }
+                }
+            }
+        }
+        
+        public SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, string[] options = null, float min = 0f, float max = 1f) {
+
+            var setting = new SettingsInstance();
+
+            setting.settingName = settingName;
+            setting.toolTip = toolTip;
+            setting.m_settingsKey = settingName;
+
+            setting.settingsType = settingsType;
+            setting.options = options;
+            setting.min = min;
+            setting.max = max;
+
+            var global = ServiceLocator.GetService<GlobalSettingsHandler>();
+            SettingsInstance[] listToAdd;
+            if (settingListToAddTo == "BUG") { listToAdd = global.BugsSettings; }
+            else if (settingListToAddTo == "VIDEO") { listToAdd = global.VideoSettings; }
+            else if (settingListToAddTo == "AUDIO") { listToAdd = global.AudioSettings; }
+            else if (settingListToAddTo == "CONTROLS") { listToAdd = global.ControlSettings; }
+            else { listToAdd = global.GameplaySettings; }
+
+            var list = listToAdd.ToList();
+            list.Add(setting);
+
+            if (settingListToAddTo == "BUG") { typeof(GlobalSettingsHandler).GetField("m_bugsSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+            else if (settingListToAddTo == "VIDEO") { typeof(GlobalSettingsHandler).GetField("m_videoSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+            else if (settingListToAddTo == "AUDIO") { typeof(GlobalSettingsHandler).GetField("m_audioSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+            else if (settingListToAddTo == "CONTROLS") { typeof(GlobalSettingsHandler).GetField("m_controlSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+            else { typeof(GlobalSettingsHandler).GetField("m_gameplaySettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+
+            return setting;
         }
 
         public static AssetBundle combatUpgrade = AssetBundle.LoadFromMemory(Properties.Resources.combatupgrade);
@@ -168,5 +217,11 @@ namespace VanillaPlus {
         public List<IDatabaseEntity> unitsToUpgrade = new List<IDatabaseEntity>();
         
         public List<UnitBlueprint> unitsToNotUpgrade = new List<UnitBlueprint>();
+
+        public List<IDatabaseEntity> unitList = new List<IDatabaseEntity>();
+        
+        public Dictionary<DatabaseID, UnitSkeleton> unitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
+        
+        public Dictionary<DatabaseID, UnitSkeleton> originalUnitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
     }
 }
