@@ -119,12 +119,18 @@ namespace VanillaPlus {
                 name = "Bullshit: The Reboot",
                 hideFlags = HideFlags.HideAndDontSave
             }.AddComponent<VPSecretManager>();
-            var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek"));
+            var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek_1"));
             if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
             var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
             if (paladinHammer) { paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
             var cultistMace = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
             if (cultistMace) { cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var assassinDagger = db.WeaponList.ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
+            if (assassinDagger) { assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var warGlaive = db.WeaponList.ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
+            if (warGlaive) { warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var club = db.WeaponList.ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
+            if (club) { club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
         }
 
         public void DeepCopyUnit(UnitBlueprint unit1, UnitBlueprint unit2)
