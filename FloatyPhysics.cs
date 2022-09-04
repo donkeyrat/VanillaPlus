@@ -99,7 +99,11 @@ public class FloatyPhysics : MonoBehaviour
 			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
 			               : 1f);
 		if (data.unit.GetComponentInChildren<Wings>() && data.unit.GetComponentInChildren<Wings>().useWingsInPlacement)
+		{
+		
 			useWingsInPlacement = false;
+			data.unit.GetComponentInChildren<Wings>().flightForce *= 1.5f;
+		}
 	}
 
 	private void FixedUpdate()
