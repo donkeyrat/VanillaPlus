@@ -86,18 +86,17 @@ public class FloatyPhysics : MonoBehaviour
 
 		distance = Vector3.Distance(data.hip.position,
 			new Vector3(data.hip.position.x,
-				data.footLeft.FindChildRecursive("FootCollider").GetComponent<Collider>().bounds.min.y,
+				data.footLeft.GetComponentsInChildren<Collider>()[0].bounds.min.y,
 				data.hip.position.z));
-		//if (data.unit.unitBlueprint.sizeMultiplier >= 3f)
-		//{
-	//		data.GetComponent<StandingHandler>().enabled = true;
-	//		Destroy(gameObject);
-		//}
 
 		flightForce *= data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier *
 		               (data.unit.unitBlueprint.sizeMultiplier >= 1.4f
 			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
 			               : 1f);
+		if (data.unit.gameObject.name.Contains("Blackbeard"))
+		{
+			flightForce *= 2f * 2f * 2f;
+		}
 		if (data.unit.GetComponentInChildren<Wings>() && data.unit.GetComponentInChildren<Wings>().useWingsInPlacement)
 		{
 		

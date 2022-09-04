@@ -16,7 +16,7 @@ namespace VanillaPlus {
             AssetPool.SetActive(false);
             var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
             var unitList = db.UnitList.ToList();
-            unitsToUpgrade = new List<IDatabaseEntity>(unitList.FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy"))));
+            unitsToUpgrade = new List<IDatabaseEntity>(unitList.FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling") || ((UnitBlueprint)x).UnitBase.name.Contains("Blackbeard"))));
             unitsToNotUpgrade = new List<UnitBlueprint>();
             foreach (var unit in combatUpgrade.LoadAllAssets<UnitBlueprint>())
             {
@@ -33,7 +33,7 @@ namespace VanillaPlus {
             }
             foreach (var b in db.UnitBaseList)
             {
-                if (b != null && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy")))
+                if (b != null && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy") || b.name.Contains("Halfling") || b.name.Contains("Blackbeard")))
                 {
                     b.GetComponentInChildren<StandingHandler>().enabled = false;
                     b.GetComponentInChildren<Balance>().allowedLegAngle = 125f;
@@ -80,9 +80,10 @@ namespace VanillaPlus {
                 
                 if (!unitsToNotUpgrade.Contains(unit) && unit.sizeMultiplier < 3f)
                 {
-                    unit.animationMultiplier = 1f;
-                    unit.movementSpeedMuiltiplier /= 1.5f;
-                    unit.stepMultiplier = 1f;
+                    unit.animationMultiplier = Mathf.Lerp(unit.animationMultiplier, 1f, 0.5f);
+                    unit.movementSpeedMuiltiplier = Mathf.Lerp(unit.movementSpeedMuiltiplier, 0.75f, 0.5f);
+                    unit.stepMultiplier = Mathf.Lerp(unit.stepMultiplier, 0.75f, 0.5f);
+                    unitsToNotUpgrade.Add(unit);
                 }
             }
             
@@ -112,11 +113,14 @@ namespace VanillaPlus {
                     }
                 }
             }
-            
-            new GameObject() {
+
+            new GameObject()
+            {
                 name = "Bullshit: The Reboot",
                 hideFlags = HideFlags.HideAndDontSave
             }.AddComponent<VPSecretManager>();
+            var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek"));
+            if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
         }
 
         public void DeepCopyUnit(UnitBlueprint unit1, UnitBlueprint unit2)
