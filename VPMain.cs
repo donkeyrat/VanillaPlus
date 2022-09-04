@@ -121,6 +121,10 @@ namespace VanillaPlus {
             }.AddComponent<VPSecretManager>();
             var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek"));
             if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
+            var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
+            if (paladinHammer) { paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var cultistMace = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
+            if (cultistMace) { cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
         }
 
         public void DeepCopyUnit(UnitBlueprint unit1, UnitBlueprint unit2)
