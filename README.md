@@ -58,6 +58,12 @@ Minor balancing changes may not be noted.
 ## Changelog
 
 The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only place to view the full changelog.
+
+## 1.0.0
+
+ - Added 2.0-esque movement.
+ - Reworked Spear Thrower, Squire, Archer, Knight, Catapult, Hoplite, Minotaur, Zeus, Brawler, Jarl, Samurai, Monk, Monkey King, Fencer, Captain, and Boxer.
+ -  Added Skewer Thrower, Marauder, and Nunchucks.
   
 ## Credits
 
