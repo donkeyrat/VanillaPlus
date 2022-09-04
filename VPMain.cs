@@ -97,6 +97,31 @@ namespace VanillaPlus {
                     unitsToNotUpgrade.Add(unit);
                 }
             }
+
+            new GameObject()
+            {
+                name = "Bullshit: The Reboot",
+                hideFlags = HideFlags.HideAndDontSave
+            }.AddComponent<VPSecretManager>();
+            
+            var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek_1"));
+            if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
+            var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
+            if (paladinHammer) { paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var cultistMace = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
+            if (cultistMace) { cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var assassinDagger = db.WeaponList.ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
+            if (assassinDagger) { assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var warGlaive = db.WeaponList.ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
+            if (warGlaive) { warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            var club = db.WeaponList.ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
+            if (club) { club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+
+            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
+                "Enables/disables unit modifications.", "BUG",
+                new string[] { "Enable unit modifications", "Disable unit modifications" });
+            toggleUpgrades.OnValueChanged += ToggleUpgrades;
+            ToggleUpgrades(toggleUpgrades.defaultValue);
             
             List<Faction> factions = (List<Faction>)typeof(LandfallUnitDatabase).GetField("Factions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
             foreach (var fac in combatUpgrade.LoadAllAssets<Faction>()) {
@@ -124,31 +149,6 @@ namespace VanillaPlus {
                     }
                 }
             }
-
-            new GameObject()
-            {
-                name = "Bullshit: The Reboot",
-                hideFlags = HideFlags.HideAndDontSave
-            }.AddComponent<VPSecretManager>();
-            
-            var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek_1"));
-            if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
-            var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
-            if (paladinHammer) { paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
-            var cultistMace = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
-            if (cultistMace) { cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
-            var assassinDagger = db.WeaponList.ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
-            if (assassinDagger) { assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
-            var warGlaive = db.WeaponList.ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
-            if (warGlaive) { warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
-            var club = db.WeaponList.ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
-            if (club) { club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
-
-            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
-                "Enables/disables unit modifications.", "BUG",
-                new string[] { "Enable unit modifications", "Disable unit modifications" });
-            toggleUpgrades.OnValueChanged += ToggleUpgrades;
-            ToggleUpgrades(toggleUpgrades.defaultValue);
         }
 
         public void ToggleUpgrades(int value)
@@ -161,6 +161,16 @@ namespace VanillaPlus {
                     if (unit != null && unitSkeletons.ContainsKey(unit.Entity.GUID))
                     {
                         unitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        var secret = (Faction)LandfallUnitDatabase.GetDatabase().FactionList.ToList()
+                            .Find(x => ((Faction)x).name == "Secret");
+                        if (secret)
+                        {
+                            secret.Units = (
+                                from UnitBlueprint uj
+                                    in secret.Units
+                                orderby uj.GetUnitCost()
+                                select uj).ToArray();
+                        }
                     }
                 }
             }
@@ -172,6 +182,16 @@ namespace VanillaPlus {
                     if (unit != null && originalUnitSkeletons.ContainsKey(unit.Entity.GUID))
                     {
                         originalUnitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        var secret = (Faction)LandfallUnitDatabase.GetDatabase().FactionList.ToList()
+                            .Find(x => ((Faction)x).name == "Secret");
+                        if (secret)
+                        {
+                            secret.Units = (
+                                from UnitBlueprint uj
+                                    in secret.Units
+                                orderby uj.GetUnitCost()
+                                select uj).ToArray();
+                        }
                     }
                 }
             }
