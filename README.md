@@ -1,4 +1,4 @@
-# Vanilla Plus
+﻿# Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
 
@@ -58,7 +58,8 @@ Minor balancing changes may not be noted.
 | **Monkey King** | The Monkey King swings its staff more gracefully, and can spawn clones when hitting the ground. Its clones now have a 50% chance of summoning clones of their own. It now costs 3000. |
 | **Fencer** | The Fencer's dodge has been tweaked, and its fighting style has been improved. |
 | **Captain** | The Captain is now taller, and aims its flintlock more effectively. Its sword has received a fighting style rework as well, and its health has been increased. It now costs 1800. |
-| **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased.|
+| **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased. |
+| **Teacher** | The Teacher's clothing coloring has been fixed, and it can now parry more weapons than the upgraded Squires. It has a much better fighting style as well. It now costs 500. |
 
 ## Changelog
 
@@ -85,6 +86,15 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
 ### 1.0.2
 
  - Fixed Squire and Marauder's offhand appearing in the first person menu.
+
+## 1.1.0
+
+ - Added a Bug DLC setting for toggling unit changes.
+ - Reworked the Teacher.
+ - Buffed Marauder health.
+ - Buffed Nunchucks health.
+ - Nerfed Monk damage.
+ - Fixed incompatibility with For Glory when legs are decapitated.
 
 ## Credits
 
