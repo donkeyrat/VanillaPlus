@@ -7,10 +7,15 @@ If you don't know what the 2.0 Animation System is, essentially, Totally Accurat
 Unfortunately, it was very poorly coded, so ultimately they remade the animation system once again, which leaves us with the 3.0 Animation System. Although its a massive improvement in many ways, it leaves much to be desired, which is what this mod changes; units are now up to par with what they were like in 2.0.
 
 Below are some clips from the 2.0 Animation System:
+
 https://www.youtube.com/watch?v=UGL__9uaLCU
+
 https://www.youtube.com/watch?v=KUQtbxQd-Y0
+
 https://www.youtube.com/watch?v=v14nTS-wTuA
+
 https://www.youtube.com/watch?v=IHkgtDwRSfc
+
 https://www.youtube.com/watch?v=zd9OnYslAeU
 
 ### If you have trouble with the mod, or if you just want to chat, you can join the [TABS Mod Center](https://discord.gg/zrs44qyp7S).
@@ -76,6 +81,10 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Improved Hoplite spear aim.
  - Fixed Brawler and Hoplite's shields clipping with their bodies.
  - Nerfed Knight's sword's damage.
+
+### 1.0.2
+
+ - Fixed Squire and Marauder's offhand appearing in the first person menu.
 
 ## Credits
 
