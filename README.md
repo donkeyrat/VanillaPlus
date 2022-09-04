@@ -1,4 +1,4 @@
-﻿# Vanilla Plus
+# Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
 
@@ -46,7 +46,7 @@ Minor balancing changes may not be noted.
 | **Hoplite** | The Hoplite's spear aim has been reworked, as well as minor tweaks to its shield and visual appearance. It now costs 200. |
 | **Minotaur** | The Minotaur has received new weapons, the Minotaur Axes. Its health has been increased as well. |
 | **Zeus** | Zeus can now throw his thunderbolts farther, and throws them half a second faster. They also chain much better, and deal slightly more damage. He now costs 3000. |
-| **Brawler** | The Brawler is more ferocious in how it swings its axe, and blocks with its shield more effectively. It now costs 180. |
+| **Brawler** | The Brawler is more ferocious in how it swings its axe, and blocks with its shield more effectively. It now costs 200. |
 | **Jarl** | The Jarl now swings its axe differently, and its enrage ability has been nerfed to last three seconds. It now costs 1200. |
 | **Samurai** | The Samurai has received new clothing, and its fighting style has been reworked. It also has a dodge, but its health has been reduced. It now costs 150. |
 | **Monk** | The Monk now swings its staff more gracefully and is more agile overall, but has less health. |
@@ -64,7 +64,19 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Added 2.0-esque movement.
  - Reworked Spear Thrower, Squire, Archer, Knight, Catapult, Hoplite, Minotaur, Zeus, Brawler, Jarl, Samurai, Monk, Monkey King, Fencer, Captain, and Boxer.
  -  Added Skewer Thrower, Marauder, and Nunchucks.
-  
+
+### 1.0.1
+
+ - Added Sarissa spear spinning fix from Hidden Units.
+ - Fixed  Righteous Paladin's hammer, Void Cultist's mace, Shadow Walker's dagger, Death Bringer's glaives, and Clubber's club being parryable by Squires.
+ - Fixed Blackbeard and Halfling not having 2.0 physics applied.
+ - Fixed slow walk speed.
+ - Decreased cooldown on Brawler's shield block and axe swing.
+ - Increased Brawler's price to 200.
+ - Improved Hoplite spear aim.
+ - Fixed Brawler and Hoplite's shields clipping with their bodies.
+ - Nerfed Knight's sword's damage.
+
 ## Credits
 
 This mod was created by Team Grad, an ambitious mod team that aims to improve the game through adding a plethora of new content.
