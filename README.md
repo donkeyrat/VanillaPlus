@@ -100,6 +100,10 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
 
  - Fixed Minotaur turning into a human.
 
+### 1.1.2
+
+ - Fixed units getting launched on death.
+
 ## Credits
 
 This mod was created by Team Grad, an ambitious mod team that aims to improve the game through adding a plethora of new content.
