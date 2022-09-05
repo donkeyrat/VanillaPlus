@@ -95,9 +95,14 @@ public class FloatyPhysics : MonoBehaviour
 		               (data.unit.unitBlueprint.sizeMultiplier >= 1.4f
 			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
 			               : 1f);
+		deadPowerDecay = 20f * data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier *
+		               (data.unit.unitBlueprint.sizeMultiplier >= 1.4f
+			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
+			               : 1f);
 		if (data.unit.gameObject.name.Contains("Blackbeard"))
 		{
 			flightForce *= 2f * 2f * 2f;
+			deadPowerDecay = 20f * 2f * 2f * 2f;
 		}
 		if (data.unit.GetComponentInChildren<Wings>() && data.unit.GetComponentInChildren<Wings>().useWingsInPlacement)
 		{
@@ -128,29 +133,16 @@ public class FloatyPhysics : MonoBehaviour
 		
 		if ((bool)data && data.Dead)
 		{
-			if (data.allRigs.AllRigs[0] != null)
+			if (!dead)
 			{
-				if (deadPower > 0f)
+				foreach (var rig in data.allRigs.AllRigs)
 				{
-					data.mainRig.AddForce(data.mainRig.transform.up * flightForce * deadPower * 1f, ForceMode.Acceleration);
-					data.mainRig.AddForce(Vector3.up * flightForce * deadPower * 0.3f, ForceMode.Acceleration);
-					deadPower -= Time.deltaTime * deadPowerDecay;
+					rig.velocity = new Vector3(rig.velocity.x, 0f, rig.velocity.z);
 				}
-				else
-				{
-					if (dead)
-					{
-						return;
-					}
-					dead = true;
-				}
-			}
-			else if (!dead)
-			{
 				dead = true;
 			}
-			return;
 		}
+
 		bool value = data.unit.m_PreferedDistance > data.distanceToTarget;
 
 		RaycastHit hitInfo;
