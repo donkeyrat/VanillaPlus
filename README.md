@@ -1,4 +1,4 @@
-﻿# Vanilla Plus
+# Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
 
@@ -95,6 +95,10 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Buffed Nunchucks health.
  - Nerfed Monk damage.
  - Fixed incompatibility with For Glory when legs are decapitated.
+
+### 1.1.1
+
+ - Fixed Minotaur turning into a human.
 
 ## Credits
 

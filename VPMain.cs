@@ -31,7 +31,7 @@ namespace VanillaPlus {
                 {
                     unit.UnitBase = find;
                 }
-                else if (unit.UnitBase && unit.UnitBase.name.Contains("2.0") && find2)
+                else if (unit.UnitBase && unit.UnitBase.name.Contains("2.0") && !unit.UnitBase.name.Contains("Minotaur") && find2)
                 {
                     unit.UnitBase = find2;
                 }
