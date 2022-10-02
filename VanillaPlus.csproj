@@ -459,6 +459,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MasterBolt.cs" />
+        <Compile Include="ParryRoot.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
         <Compile Include="UnitSkeleton.cs" />
         <Compile Include="VPBinder.cs" />

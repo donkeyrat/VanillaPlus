@@ -3,7 +3,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BitCode.Debug.Commands;
 using HarmonyLib;
+using Landfall.TABS.UnitEditor;
 
 namespace VanillaPlus {
 
@@ -18,6 +20,32 @@ namespace VanillaPlus {
             unitList = db.UnitList.ToList();
             unitsToUpgrade = new List<IDatabaseEntity>(unitList.FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling") || ((UnitBlueprint)x).UnitBase.name.Contains("Blackbeard"))));
             unitsToNotUpgrade = new List<UnitBlueprint>();
+            
+            shieldWhitelist.Add("Shield_Tower_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("Ra_Shield", 0.5f);
+            shieldWhitelist.Add("CavalryKnightShield 1_1 Weapons_VB", 0.5f);
+            shieldWhitelist.Add("KnightlyShield", 2f);
+            shieldWhitelist.Add("KnightShield", 2f);
+            shieldWhitelist.Add("KnightShield_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("KnightShieldNew_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("EvilTankShield_Test_L_1 Weapons_VB", 0.5f);
+            shieldWhitelist.Add("EvilTankShield_Test_R_1 Weapons_VB", 0.5f);
+            shieldWhitelist.Add("Evil_ClericShield_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("Good_Cleric_Shield_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("Skeletonshield_Giant_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("Ballistic Shield_1 Weapons_VB", 0.5f);
+            shieldWhitelist.Add("BallisticShield_Taser", 1f);
+            shieldWhitelist.Add("BallisticShields", 0.5f);
+            shieldWhitelist.Add("CrusaderShield", 1f);
+            shieldWhitelist.Add("Napoleonic_Shield", 0.5f);
+            shieldWhitelist.Add("Spartan_Shield", 2f);
+            shieldWhitelist.Add("Wargod_Shield", 0.5f);
+            shieldWhitelist.Add("SmallShield_1 Weapons_VB", 2f);
+            shieldWhitelist.Add("Shield_Wall_1 Weapons_VB", 0.5f);
+            shieldWhitelist.Add("Legionary_Shield", 2f);
+            shieldWhitelist.Add("CookieShield", 1f);
+            shieldWhitelist.Add("CenturionShield_1 Weapons_VB", 1f);
+            
             foreach (var unit in combatUpgrade.LoadAllAssets<UnitBlueprint>())
             {
                 if (!unit.name.Contains("2.0"))
@@ -105,23 +133,41 @@ namespace VanillaPlus {
             }.AddComponent<VPSecretManager>();
             
             var sarissaSpear = db.WeaponList.ToList().Find(x => x.name.Contains("Spear_Greek_1"));
-            if (sarissaSpear) { sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false; }
+            if (sarissaSpear) sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false;
             var paladinHammer = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMace_1"));
-            if (paladinHammer) { paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            if (paladinHammer) paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
             var cultistMace = db.WeaponList.ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
-            if (cultistMace) { cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            if (cultistMace) cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
             var assassinDagger = db.WeaponList.ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
-            if (assassinDagger) { assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            if (assassinDagger) assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
             var warGlaive = db.WeaponList.ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
-            if (warGlaive) { warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            if (warGlaive) warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
             var club = db.WeaponList.ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
-            if (club) { club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f; }
+            if (club) club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var superb = db.WeaponList.ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_1 Weapons_VB"));
+            if (superb) superb.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
+            var superbR = db.WeaponList.ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_R_1 Weapons_VB"));
+            if (superbR) superbR.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
+            var valk = db.WeaponList.ToList().Find(x => x.name.Contains("ValkyrieSword_1 Weapons_VB"));
+            if (valk) valk.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
 
             var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
-                "Enables/disables unit modifications.", "BUG",
+                "Enables/disables unit modifications.", "GAMEPLAY",
                 new string[] { "Enable unit modifications", "Disable unit modifications" });
             toggleUpgrades.OnValueChanged += ToggleUpgrades;
             ToggleUpgrades(toggleUpgrades.defaultValue);
+            
+            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking",
+                "Enables/disables shied blocking.", "GAMEPLAY",
+                new string[] { "Enable shield blocking", "Disable shield blocking" });
+            toggleShieldBlocking.OnValueChanged += ToggleShieldBlocking;
+            ToggleShieldBlocking(toggleShieldBlocking.defaultValue);
+            
+            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block",
+                "Makes all weapons block on contact", "BUG",
+                new string[] { "Disable weapon blocking", "Enable weapon blocking" });
+            toggleAllBlocking.OnValueChanged += ToggleAllBlocking;
+            ToggleAllBlocking(toggleAllBlocking.defaultValue);
             
             List<Faction> factions = (List<Faction>)typeof(LandfallUnitDatabase).GetField("Factions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
             foreach (var fac in combatUpgrade.LoadAllAssets<Faction>()) {
@@ -149,6 +195,38 @@ namespace VanillaPlus {
                     }
                 }
             }
+
+            List<GameObject> stuff = (List<GameObject>)typeof(LandfallUnitDatabase).GetField("UnitBases", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
+            List<GameObject> stuff2 = (List<GameObject>)typeof(LandfallUnitDatabase).GetField("Weapons", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
+            List<GameObject> stuff3 = (List<GameObject>)typeof(LandfallUnitDatabase).GetField("Projectiles", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
+            List<GameObject> stuff4 = (List<GameObject>)typeof(LandfallUnitDatabase).GetField("CombatMoves", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
+            List<GameObject> stuff5 = (List<GameObject>)typeof(LandfallUnitDatabase).GetField("CharacterProps", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
+            foreach (var objecting in combatUpgrade.LoadAllAssets<GameObject>()) {
+
+                if (objecting != null) {
+
+                    if (objecting.GetComponent<Unit>()) {
+                        stuff.Add(objecting);
+                    }
+                    else if (objecting.GetComponent<WeaponItem>()) {
+                        stuff2.Add(objecting);
+                    }
+                    else if (objecting.GetComponent<ProjectileEntity>()) {
+                        stuff3.Add(objecting);
+                    }
+                    else if (objecting.GetComponent<SpecialAbility>()) {
+                        stuff4.Add(objecting);
+                    }
+                    else if (objecting.GetComponent<PropItem>()) {
+                        stuff5.Add(objecting);
+                    }
+                }
+            }
+            typeof(LandfallUnitDatabase).GetField("UnitBases", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, stuff);
+            typeof(LandfallUnitDatabase).GetField("Weapons", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, stuff2);
+            typeof(LandfallUnitDatabase).GetField("Projectiles", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, stuff3);
+            typeof(LandfallUnitDatabase).GetField("CombatMoves", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, stuff4);
+            typeof(LandfallUnitDatabase).GetField("CharacterProps", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, stuff5);
         }
 
         public void ToggleUpgrades(int value)
@@ -196,6 +274,54 @@ namespace VanillaPlus {
                 }
             }
         }
+
+        public void ToggleShieldBlocking(int value)
+        {
+            if (value == 0)
+            {
+                foreach (var wp in LandfallUnitDatabase.GetDatabase().WeaponList)
+                {
+                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
+                    {
+                        wp.AddComponent<ParryRoot>().globalCooldown = shieldWhitelist[wp.name];
+                    }
+                }
+            }
+            else
+            {
+                foreach (var wp in LandfallUnitDatabase.GetDatabase().WeaponList)
+                {
+                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
+                    {
+                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
+                    }
+                }
+            }
+        }
+        
+        public void ToggleAllBlocking(int value)
+        {
+            if (value == 1)
+            {
+                foreach (var wp in LandfallUnitDatabase.GetDatabase().WeaponList)
+                {
+                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
+                    {
+                        wp.AddComponent<ParryRoot>();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var wp in LandfallUnitDatabase.GetDatabase().WeaponList)
+                {
+                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
+                    {
+                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
+                    }
+                }
+            }
+        }
         
         public SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, string[] options = null, float min = 0f, float max = 1f) {
 
@@ -239,6 +365,8 @@ namespace VanillaPlus {
         public List<UnitBlueprint> unitsToNotUpgrade = new List<UnitBlueprint>();
 
         public List<IDatabaseEntity> unitList = new List<IDatabaseEntity>();
+        
+        public Dictionary<string, float> shieldWhitelist = new Dictionary<string, float>();
         
         public Dictionary<DatabaseID, UnitSkeleton> unitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
         

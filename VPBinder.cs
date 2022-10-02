@@ -68,6 +68,7 @@ namespace VanillaPlus {
                     }
                 }
             }
+            main.ToggleShieldBlocking(0);
             yield break;
         }
 
