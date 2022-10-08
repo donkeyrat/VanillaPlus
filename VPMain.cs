@@ -217,7 +217,7 @@ namespace VanillaPlus {
                     else if (objecting.GetComponent<SpecialAbility>()) {
                         stuff4.Add(objecting);
                     }
-                    else if (objecting.GetComponent<PropItem>()) {
+                    else if (objecting.GetComponent<PropItem>() && objecting.GetComponent<PropItem>().ShowInEditor) {
                         stuff5.Add(objecting);
                     }
                 }

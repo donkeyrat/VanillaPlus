@@ -1,4 +1,4 @@
-# Vanilla Plus
+﻿# Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
 
@@ -42,12 +42,14 @@ Minor balancing changes may not be noted.
 
 | Unit  | Modification |
 |--|--|
-| **All wobbler/stiffy units** | All units in the game with wobbler or skeleton unit bases have been tweaked to be floatier, along with more exaggerated walking animations. This includes giants, and modded unit bases. |
+| **All wobbler/stiffy units** | All units in the game with wobbler or skeleton unit bases have been tweaked to be floatier, along with more exaggerated walking animations. This includes giants, and modded unit bases. Certain units with shields now have shield blocks. |
 | **Spear Thrower** | The Spear Thrower has been renamed to the Hunter, and is now a melee unit. In addition, its health has been increased, and it has received an armband. |
 | **Squire** | The Squire's clothes have been changed to better resemble the 2.0 Squire, and it now wields a one-handed sword, which it uses to parry. Its health was also increased. |
 | **Archer** | The Archer now pulls its bow back harder, and its fire rate has been improved as well. |
 | **Knight** | The Knight's shield now presses onto enemy weapons to block attacks, and it swings its sword with more ferocity. It now costs 700. |
 | **Catapult** | The Catapult's fire rate has been improved, as well as its explosion damage and radius. It also deals damage as it rolls, and leaves dust particles. |
+| **Shield Bearer** | The Shield Bearer now holds its shield higher and walks slower. Its health has also been raised. |
+| **Sarissa** | The Sarissa now walks slower and has slightly higher health. |
 | **Hoplite** | The Hoplite's spear aim has been reworked, as well as minor tweaks to its shield and visual appearance. It now costs 200. |
 | **Minotaur** | The Minotaur has received new weapons, the Minotaur Axes. Its health has been increased as well. |
 | **Zeus** | Zeus can now throw his thunderbolts farther, and throws them half a second faster. They also chain much better, and deal slightly more damage. He now costs 3000. |
@@ -58,6 +60,9 @@ Minor balancing changes may not be noted.
 | **Monkey King** | The Monkey King swings its staff more gracefully, and can spawn clones when hitting the ground. Its clones now have a 50% chance of summoning clones of their own. It now costs 3000. |
 | **Fencer** | The Fencer's dodge has been tweaked, and its fighting style has been improved. |
 | **Captain** | The Captain is now taller, and aims its flintlock more effectively. Its sword has received a fighting style rework as well, and its health has been increased. It now costs 1800. |
+| **Pirate Queen** | The Pirate Queen has received a health nerf. |
+| **Vampire** | The Vampire has received a new hair model and bat model. The bat also properly looks at enemy units rather than being jittery. It now costs 300. |
+| **Swordcaster** | The Swordcaster's clothes have been recolored and its bowlcut has been replaced with blue fire hair. Its eyes now glow and its sword also glows, and has an on-hit effect. In addition, its swords go through shields and armor, and cannot be blocked by most projectile blocking units. |
 | **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased. |
 | **Teacher** | The Teacher's clothing coloring has been fixed, and it can now parry more weapons than the upgraded Squires. It has a much better fighting style as well. It now costs 500. |
 
@@ -103,6 +108,19 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
 ### 1.1.2
 
  - Fixed units getting launched on death.
+
+## 2.0.0
+
+ - Added shield blocking to certain shield units.
+ - Moved unit revamp toggle to Gameplay tab in settings.
+ - Added a Gameplay setting for toggling shield blocking.
+ - Added a Bug DLC setting for toggling blocking on all units.
+ - Reworked the Shield Bearer.
+ - Reworked the Sarissa.
+ - Reworked the Pirate Queen.
+ - Reworked the Vampire.
+ - Reworked the Swordcaster.
+ - Rebalanced the Minotaur.
 
 ## Credits
 
