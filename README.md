@@ -1,4 +1,4 @@
-﻿# Vanilla Plus
+# Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
 
@@ -61,7 +61,7 @@ Minor balancing changes may not be noted.
 | **Fencer** | The Fencer's dodge has been tweaked, and its fighting style has been improved. |
 | **Captain** | The Captain is now taller, and aims its flintlock more effectively. Its sword has received a fighting style rework as well, and its health has been increased. It now costs 1800. |
 | **Pirate Queen** | The Pirate Queen has received a health nerf. |
-| **Vampire** | The Vampire has received a new hair model and bat model. The bat also properly looks at enemy units rather than being jittery. It now costs 300. |
+| **Vampire** | The Vampire has received a new hair model and bat model. The bat also properly looks at enemy units rather than being jittery. Moreover, its human and bat forms have received black and red eyes. It now costs 300. |
 | **Swordcaster** | The Swordcaster's clothes have been recolored and its bowlcut has been replaced with blue fire hair. Its eyes now glow and its sword also glows, and has an on-hit effect. In addition, its swords go through shields and armor, and cannot be blocked by most projectile blocking units. |
 | **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased. |
 | **Teacher** | The Teacher's clothing coloring has been fixed, and it can now parry more weapons than the upgraded Squires. It has a much better fighting style as well. It now costs 500. |
