@@ -41,7 +41,7 @@ namespace VanillaPlus
                 
                 if (GetComponentInChildren<CollisionSound>())
                 {
-                    ServiceLocator.GetService<SoundPlayer>().PlaySoundEffect(GetComponentInChildren<CollisionSound>().soundEffectRef, 1f, col.contacts[0].point, SoundEffectVariations.MaterialType.Metal);
+                    ServiceLocator.GetService<SoundPlayer>().PlaySoundEffect(GetComponentInChildren<CollisionSound>().SoundEffectRef, 1f, col.contacts[0].point, SoundEffectVariations.MaterialType.Metal);
                 }
                 var parry = Instantiate(VPMain.combatUpgrade.LoadAsset<GameObject>("E_Parry"), col.contacts[0].point, Quaternion.identity);
                 parry.GetComponent<ParticleSystem>().Play();

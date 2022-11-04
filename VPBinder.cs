@@ -3,6 +3,7 @@ using UnityEngine;
 using Landfall.TABS;
 using System.Collections.Generic;
 using System.Linq;
+using DM;
 
 namespace VanillaPlus {
 
@@ -25,7 +26,7 @@ namespace VanillaPlus {
             yield return new WaitUntil(() => ServiceLocator.GetService<ISaveLoaderService>() != null);
             var main = new VPMain();
             yield return new WaitForSeconds(0.4f);
-            foreach (var b in LandfallUnitDatabase.GetDatabase().UnitBaseList)
+            foreach (var b in ContentDatabase.Instance().LandfallContentDatabase.GetUnitBases().ToList())
             {
                 if (b != null && !b.GetComponent<AttackSpeedBug>() && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy") || b.name.Contains("Halfling")))
                 {
@@ -55,7 +56,7 @@ namespace VanillaPlus {
                         b.GetComponent<Unit>().data.hip;
                     b.GetComponent<Unit>().data.hip.gameObject.AddComponent<SpawnFloatyPhysics>();
                 }
-                main.unitsToUpgrade = new List<IDatabaseEntity>(LandfallUnitDatabase.GetDatabase().UnitList.ToList().FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling"))));
+                main.unitsToUpgrade = new List<IDatabaseEntity>(ContentDatabase.Instance().LandfallContentDatabase.GetUnitBlueprints().ToList().FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling"))));
                 foreach (var u in main.unitsToUpgrade)
                 {
                     var unit = (UnitBlueprint)u;

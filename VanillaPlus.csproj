@@ -482,7 +482,7 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Resources" />
+      <Content Include="Resources\combatupgrade" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
    <PropertyGroup>
