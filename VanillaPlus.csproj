@@ -458,28 +458,19 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="KillYourself.cs" />
         <Compile Include="MasterBolt.cs" />
         <Compile Include="ParryRoot.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
         <Compile Include="UnitSkeleton.cs" />
+        <Compile Include="VPAddEffectToTargetOnce.cs" />
         <Compile Include="VPBinder.cs" />
         <Compile Include="VPLauncher.cs" />
         <Compile Include="VPMain.cs" />
         <Compile Include="VPExtensions.cs" />
 	<Compile Include="FloatyPhysics.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-	<Compile Include="Properties\Resources.Designer.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
 	<Compile Include="VPSecretManager.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Properties\Resources.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
       <Content Include="Resources\combatupgrade" />
