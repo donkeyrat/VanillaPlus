@@ -19,8 +19,10 @@ namespace VanillaPlus {
             AssetPool.hideFlags = HideFlags.HideAndDontSave;
             AssetPool.SetActive(false);
             var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
-            unitList = db.GetAllUnitBlueprints().ToList();
-            unitsToUpgrade = new List<IDatabaseEntity>(unitList.FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling") || ((UnitBlueprint)x).UnitBase.name.Contains("Blackbeard"))));
+            unitList = db.LandfallContentDatabase.GetUnitBlueprints().ToList();
+            unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null && (x.UnitBase && (x.UnitBase.name.Contains("Humanoid") || x.UnitBase.name.Contains("Stiffy") || x.UnitBase.name.Contains("Halfling") || x.UnitBase.name.Contains("Blackbeard")))));
+            //unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null));
+            Debug.Log("hello");
             unitsToNotUpgrade = new List<UnitBlueprint>();
             
             shieldWhitelist.Add("Shield_Tower_1 Weapons_VB", 2f);
@@ -45,7 +47,6 @@ namespace VanillaPlus {
             shieldWhitelist.Add("SmallShield_1 Weapons_VB", 2f);
             shieldWhitelist.Add("Shield_Wall_1 Weapons_VB", 0.5f);
             shieldWhitelist.Add("Legionary_Shield", 2f);
-            shieldWhitelist.Add("CookieShield", 1f);
             shieldWhitelist.Add("CenturionShield_1 Weapons_VB", 1f);
             
             foreach (var unit in combatUpgrade.LoadAllAssets<UnitBlueprint>())
@@ -99,9 +100,8 @@ namespace VanillaPlus {
                     b.AddComponent<AttackSpeedBug>();
                 }
             }
-            foreach (var u in unitList)
+            foreach (var unit in unitList)
             {
-                var unit = (UnitBlueprint)u;
                 var foundUnit = upgradedUnits.Find(x => x.name == unit.name + "_2.0");
                 if (foundUnit)
                 {
@@ -115,10 +115,8 @@ namespace VanillaPlus {
                 }
             }
 
-            foreach (var u in unitsToUpgrade)
+            foreach (var unit in unitsToUpgrade)
             {
-                var unit = (UnitBlueprint)u;
-                
                 if (!unitsToNotUpgrade.Contains(unit) && unit.sizeMultiplier < 3f)
                 {
                     unit.animationMultiplier = Mathf.Lerp(unit.animationMultiplier, 1f, 0.5f);
@@ -393,8 +391,11 @@ namespace VanillaPlus {
             Dictionary<DatabaseID, UnitBlueprint> units = (Dictionary<DatabaseID, UnitBlueprint>)typeof(LandfallContentDatabase).GetField("m_unitBlueprints", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
             foreach (var unit in newUnits)
             {
-                units.Add(unit.Entity.GUID, unit);
-                nonStreamableAssets.Add(unit.Entity.GUID, unit);
+	            if (!units.ContainsKey(unit.Entity.GUID))
+	            {
+		            units.Add(unit.Entity.GUID, unit);
+		            nonStreamableAssets.Add(unit.Entity.GUID, unit);
+	            }
             }
             typeof(LandfallContentDatabase).GetField("m_unitBlueprints", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, units);
             
@@ -402,7 +403,7 @@ namespace VanillaPlus {
             List<DatabaseID> defaultHotbarFactions = (List<DatabaseID>)typeof(LandfallContentDatabase).GetField("m_defaultHotbarFactionIds", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
             foreach (var faction in newFactions)
             {
-	            if (faction != null)
+	            if (!factions.ContainsKey(faction.Entity.GUID))
 	            {
 		            factions.Add(faction.Entity.GUID, faction);
 		            nonStreamableAssets.Add(faction.Entity.GUID, faction);
@@ -411,14 +412,7 @@ namespace VanillaPlus {
             }
             typeof(LandfallContentDatabase).GetField("m_factions", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, factions);
             typeof(LandfallContentDatabase).GetField("m_defaultHotbarFactionIds", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(db, defaultHotbarFactions.OrderBy(x => factions[x].index).ToList());
-            foreach (var fac in ContentDatabase.Instance().GetDefaultHotbarFactions())
-            {
-	            if (fac != null)
-	            {
-		            Debug.Log(fac.Entity.Name);
-	            }
-            }
-            
+
             Dictionary<DatabaseID, TABSCampaignAsset> campaigns = (Dictionary<DatabaseID, TABSCampaignAsset>)typeof(LandfallContentDatabase).GetField("m_campaigns", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(db);
             foreach (var campaign in newCampaigns)
             {
@@ -545,11 +539,11 @@ namespace VanillaPlus {
         
         public List<GameObject> newProjectiles = new List<GameObject>();
 
-        public static AssetBundle combatUpgrade;// = AssetBundle.LoadFromMemory(Properties.Resources.combatupgrade);
+        public static AssetBundle combatUpgrade = AssetBundle.LoadFromMemory(Properties.Resources.combatupgrade);
 
         private GameObject AssetPool = new GameObject();
 
-        public List<IDatabaseEntity> unitsToUpgrade = new List<IDatabaseEntity>();
+        public List<UnitBlueprint> unitsToUpgrade = new List<UnitBlueprint>();
         
         public List<UnitBlueprint> unitsToNotUpgrade = new List<UnitBlueprint>();
 

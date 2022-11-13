@@ -458,10 +458,14 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Abyssal.cs" />
+        <Compile Include="BornOfGodAndVoid.cs" />
         <Compile Include="KillYourself.cs" />
         <Compile Include="MasterBolt.cs" />
         <Compile Include="ParryRoot.cs" />
+        <Compile Include="RandomizeParticleSeed.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
+        <Compile Include="Superimage.cs" />
         <Compile Include="UnitSkeleton.cs" />
         <Compile Include="VPAddEffectToTargetOnce.cs" />
         <Compile Include="VPBinder.cs" />
@@ -470,7 +474,20 @@
         <Compile Include="VPExtensions.cs" />
 	<Compile Include="FloatyPhysics.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="VPMaterialEvent.cs" />
+        <Compile Include="VPMaterialEventTeamColor.cs" />
 	<Compile Include="VPSecretManager.cs" />
+        <Compile Include="Properties\Resources.Designer.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Properties\Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
       <Content Include="Resources\combatupgrade" />

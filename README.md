@@ -1,3 +1,4 @@
+﻿
 # Vanilla Plus
 
 Totally Accurate Battle Simulator has very boring combat. This mod changes weaker units to be more interesting to watch, making all the difference in large-scale battles! Movement has also been tweaked to be a bit floatier, with the walking animation also changed to be more exaggerated!
@@ -49,8 +50,9 @@ Minor balancing changes may not be noted.
 | **Knight** | The Knight's shield now presses onto enemy weapons to block attacks, and it swings its sword with more ferocity. It now costs 700. |
 | **Catapult** | The Catapult's fire rate has been improved, as well as its explosion damage and radius. It also deals damage as it rolls, and leaves dust particles. |
 | **Shield Bearer** | The Shield Bearer now holds its shield higher and walks slower. Its health has also been raised. |
-| **Sarissa** | The Sarissa now walks slower and has slightly higher health. |
+| **Sarissa** | The Sarissa now walks slower and has slightly higher health. It can also aim better. |
 | **Hoplite** | The Hoplite's spear aim has been reworked, as well as minor tweaks to its shield and visual appearance. It now costs 200. |
+| **Snake Archer** | The Snake Archer can now fire slightly faster and pulls its bow back harder. It has also received snakes in its quiver. |
 | **Minotaur** | The Minotaur has received new weapons, the Minotaur Axes. Its health has been increased as well. |
 | **Zeus** | Zeus can now throw his thunderbolts farther, and throws them half a second faster. They also chain much better, and deal slightly more damage. He now costs 3000. |
 | **Brawler** | The Brawler is more ferocious in how it swings its axe, and blocks with its shield more effectively. It now costs 200. |
@@ -64,6 +66,8 @@ Minor balancing changes may not be noted.
 | **Vampire** | The Vampire has received a new hair model and bat model. The bat also properly looks at enemy units rather than being jittery. Moreover, its human and bat forms have received black and red eyes. It now costs 300. |
 | **Swordcaster** | The Swordcaster's clothes have been recolored and its bowlcut has been replaced with blue fire hair. Its eyes now glow and its sword also glows, and has an on-hit effect. In addition, its swords go through shields and armor, and cannot be blocked by most projectile blocking units. |
 | **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased. |
+| ***DARK PEASANT*** | The Dark Peasant has received a complete revamp; it has new clothing, abilities, and weapons. It now uses orbs to attack, and its hands have been de-emphasized. At long ranges it can summon beams of darkness on enemies. When it takes a lot of damage, it can release a burst of spikes and darkness from itself. When it dies, it turns to dust. |
+| ***SUPER PEASANT*** | The Super Peasant has received some light visual tweaks as well as a speed nerf and a new ability, which causes it to duplicate every few moments. When it dies, it explodes into light. |
 | **Teacher** | The Teacher's clothing coloring has been fixed, and it can now parry more weapons than the upgraded Squires. It has a much better fighting style as well. It now costs 500. |
 
 ## Changelog
@@ -122,11 +126,21 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Reworked the Swordcaster.
  - Rebalanced the Minotaur.
 
+## 2.1.0
+
+ - Reworked the Dark Peasant.
+ - Reworked the Super Peasant.
+ - Reworked the Snake Archer.
+ - Tweaked the Sarissa.
+ - Tweaked the Shield Bearer.
+
 ## Credits
 
 This mod was created by Team Grad, an ambitious mod team that aims to improve the game through adding a plethora of new content.
 
 **BD - Coder, Creator**
+
+**Terren - Modeler**
 
 **DoorKnob - Icon Artist**
 
@@ -135,6 +149,14 @@ This mod was created by Team Grad, an ambitious mod team that aims to improve th
 ![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1015796820892454912/unknown.png)
 
 ![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1015790606775226501/unknown.png)
+
+![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1041298280803479612/image.png)
+
+![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1041299534313168916/image.png)
+
+![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1041300145339383808/image.png)
+
+![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1041300315372265524/image.png)
 
 ![enter image description here](https://cdn.discordapp.com/attachments/651812532746584085/1015791290098655312/unknown.png)
 

@@ -56,11 +56,9 @@ namespace VanillaPlus {
                         b.GetComponent<Unit>().data.hip;
                     b.GetComponent<Unit>().data.hip.gameObject.AddComponent<SpawnFloatyPhysics>();
                 }
-                main.unitsToUpgrade = new List<IDatabaseEntity>(ContentDatabase.Instance().LandfallContentDatabase.GetUnitBlueprints().ToList().FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling"))));
-                foreach (var u in main.unitsToUpgrade)
+                main.unitsToUpgrade = new List<UnitBlueprint>(ContentDatabase.Instance().LandfallContentDatabase.GetUnitBlueprints().ToList().FindAll(x => x != null && (UnitBlueprint)x != null && ((UnitBlueprint)x).UnitBase && (((UnitBlueprint)x).UnitBase.name.Contains("Humanoid") || ((UnitBlueprint)x).UnitBase.name.Contains("Stiffy") || ((UnitBlueprint)x).UnitBase.name.Contains("Halfling"))));
+                foreach (var unit in main.unitsToUpgrade)
                 {
-                    var unit = (UnitBlueprint)u;
-                
                     if (!main.unitsToNotUpgrade.Contains(unit) && unit.sizeMultiplier < 3f)
                     {
                         unit.animationMultiplier = Mathf.Lerp(unit.animationMultiplier, 1f, 0.5f);

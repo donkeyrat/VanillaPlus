@@ -24,8 +24,6 @@ namespace VanillaPlus
                 canParry = false;
                 var force = 30f;
                 
-                Debug.Log("parry");
-                
                 col.transform.GetComponent<MeleeWeapon>().StopSwing();
                 GetComponent<MeleeWeapon>().internalCounter = Mathf.Lerp(GetComponent<MeleeWeapon>().internalCounter,
                     GetComponent<MeleeWeapon>().internalCooldown, 0.8f);
