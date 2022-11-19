@@ -21,8 +21,6 @@ namespace VanillaPlus {
             var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
             unitList = db.LandfallContentDatabase.GetUnitBlueprints().ToList();
             unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null && (x.UnitBase && (x.UnitBase.name.Contains("Humanoid") || x.UnitBase.name.Contains("Stiffy") || x.UnitBase.name.Contains("Halfling") || x.UnitBase.name.Contains("Blackbeard")))));
-            //unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null));
-            Debug.Log("hello");
             unitsToNotUpgrade = new List<UnitBlueprint>();
             
             shieldWhitelist.Add("Shield_Tower_1 Weapons_VB", 2f);
