@@ -459,13 +459,16 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Abyssal.cs" />
-        <Compile Include="BornOfGodAndVoid.cs" />
+        <Compile Include="HarmonyPatches\AbyssalPatch.cs" />
+        <Compile Include="HarmonyPatches\HealthNerfPatch.cs" />
+        <Compile Include="HarmonyPatches\InvulnerabilityNerfPatch.cs" />
         <Compile Include="KillYourself.cs" />
         <Compile Include="MasterBolt.cs" />
         <Compile Include="ParryRoot.cs" />
         <Compile Include="RandomizeParticleSeed.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
         <Compile Include="Superimage.cs" />
+        <Compile Include="UnitBaseSkeleton.cs" />
         <Compile Include="UnitSkeleton.cs" />
         <Compile Include="VPAddEffectToTargetOnce.cs" />
         <Compile Include="VPBinder.cs" />

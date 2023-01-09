@@ -3,25 +3,25 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BitCode.Debug.Commands;
 using HarmonyLib;
 using Landfall.TABS.UnitEditor;
 using Landfall.TABS.Workshop;
 using DM;
+using UnityEngine.UI;
 
-namespace VanillaPlus {
-
-	public class VPMain {
-
+namespace VanillaPlus 
+{
+    public class VPMain 
+    {
         public VPMain()
         {
             var db = ContentDatabase.Instance();
-            AssetPool.hideFlags = HideFlags.HideAndDontSave;
-            AssetPool.SetActive(false);
-            var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
+            
             unitList = db.LandfallContentDatabase.GetUnitBlueprints().ToList();
             unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null && (x.UnitBase && (x.UnitBase.name.Contains("Humanoid") || x.UnitBase.name.Contains("Stiffy") || x.UnitBase.name.Contains("Halfling") || x.UnitBase.name.Contains("Blackbeard")))));
-            unitsToNotUpgrade = new List<UnitBlueprint>();
+
+            unitBaseSkeleton.CopyUnitBaseOntoThis(combatUpgrade
+                .LoadAsset<GameObject>("Humanoid_2.0"));
             
             shieldWhitelist.Add("Shield_Tower_1 Weapons_VB", 2f);
             shieldWhitelist.Add("Ra_Shield", 0.5f);
@@ -47,6 +47,25 @@ namespace VanillaPlus {
             shieldWhitelist.Add("Legionary_Shield", 2f);
             shieldWhitelist.Add("CenturionShield_1 Weapons_VB", 1f);
             
+            var sarissaSpear = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Spear_Greek_1"));
+            if (sarissaSpear) sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false;
+            var paladinHammer = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ClericMace_1"));
+            if (paladinHammer) paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var cultistMace = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
+            if (cultistMace) cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var assassinDagger = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
+            if (assassinDagger) assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var warGlaive = db.GetAllWeapons().ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
+            if (warGlaive) warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var club = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
+            if (club) club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            var superb = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_1"));
+            if (superb) superb.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
+            var superbR = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_R_1"));
+            if (superbR) superbR.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
+            var valk = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ValkyrieSword_1"));
+            if (valk) valk.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
+            
             foreach (var unit in combatUpgrade.LoadAllAssets<UnitBlueprint>())
             {
                 if (!unit.name.Contains("2.0"))
@@ -65,39 +84,8 @@ namespace VanillaPlus {
                     unit.UnitBase = find2;
                 }
             }
-
-            foreach (var b in db.GetAllUnitBases().ToList())
-            {
-                if (b != null && !b.name.Contains("_2.") && (b.name.Contains("Humanoid") || b.name.Contains("Stiffy") || b.name.Contains("Halfling") || b.name.Contains("Blackbeard")))
-                {
-                    b.GetComponentInChildren<StandingHandler>().enabled = false;
-                    b.GetComponentInChildren<Balance>().allowedLegAngle = 125f;
-                    b.GetComponentInChildren<Balance>().allowedTorsoAngle = 80f;
-                    b.GetComponent<Unit>().data.legLeft.GetComponent<CurveAnimation>().animationData = combatUpgrade
-                        .LoadAsset<GameObject>("Humanoid_2.0").GetComponent<Unit>().data.legLeft
-                        .GetComponent<CurveAnimation>().animationData;
-                    b.GetComponent<Unit>().data.legLeft.GetComponent<CurveAnimation>().multiplier = 3f;
-                    b.GetComponent<Unit>().data.legRight.GetComponent<CurveAnimation>().animationData = combatUpgrade
-                        .LoadAsset<GameObject>("Humanoid_2.0").GetComponent<Unit>().data.legRight
-                        .GetComponent<CurveAnimation>().animationData;
-                    b.GetComponent<Unit>().data.legRight.GetComponent<CurveAnimation>().multiplier = 3f;
-                    b.GetComponent<Unit>().data.footLeft.GetComponent<CurveAnimation>().multiplier = 5f;
-                    b.GetComponent<Unit>().data.footRight.GetComponent<CurveAnimation>().multiplier = 5f;
-                    b.GetComponentInChildren<StepHandler>().multiplier = 1.6f;
-                    b.GetComponent<Unit>().data.head.GetComponent<ConfigurableJoint>().DeepCopyOf(combatUpgrade
-                        .LoadAsset<GameObject>("Humanoid_2.0").GetComponent<Unit>().data.head
-                        .GetComponent<ConfigurableJoint>());
-                    b.GetComponent<Unit>().data.head.GetComponent<ConfigurableJoint>().connectedBody =
-                        b.GetComponent<Unit>().data.mainRig;
-                    b.GetComponent<Unit>().data.mainRig.GetComponent<ConfigurableJoint>().DeepCopyOf(combatUpgrade
-                        .LoadAsset<GameObject>("Humanoid_2.0").GetComponent<Unit>().data.mainRig
-                        .GetComponent<ConfigurableJoint>());
-                    b.GetComponent<Unit>().data.mainRig.GetComponent<ConfigurableJoint>().connectedBody =
-                        b.GetComponent<Unit>().data.hip;
-                    b.GetComponent<Unit>().data.hip.gameObject.AddComponent<SpawnFloatyPhysics>();
-                    b.AddComponent<AttackSpeedBug>();
-                }
-            }
+            
+            var upgradedUnits = combatUpgrade.LoadAllAssets<UnitBlueprint>().ToList();
             foreach (var unit in unitList)
             {
                 var foundUnit = upgradedUnits.Find(x => x.name == unit.name + "_2.0");
@@ -113,59 +101,38 @@ namespace VanillaPlus {
                 }
             }
 
-            foreach (var unit in unitsToUpgrade)
-            {
-                if (!unitsToNotUpgrade.Contains(unit) && unit.sizeMultiplier < 3f)
-                {
-                    unit.animationMultiplier = Mathf.Lerp(unit.animationMultiplier, 1f, 0.5f);
-                    unit.movementSpeedMuiltiplier = Mathf.Lerp(unit.movementSpeedMuiltiplier, 0.75f, 0.5f);
-                    unit.stepMultiplier = Mathf.Lerp(unit.stepMultiplier, 0.75f, 0.5f);
-                    unitsToNotUpgrade.Add(unit);
-                }
-            }
-
-            new GameObject()
+            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
+                "Enables/disables unit modifications.", "GAMEPLAY",
+                new string[] { "Enable unit modifications", "Disable unit modifications" });
+            toggleUpgrades.OnValueChanged += ToggleUpgrades_OnValueChanged;
+            
+            var togglePhysics = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle floaty physics",
+                "Enables/disables unit modifications.", "GAMEPLAY",
+                new string[] { "Enable floaty physics", "Disable floaty physics" });
+            togglePhysics.OnValueChanged += TogglePhysics_OnValueChanged;
+            
+            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking",
+                "Enables/disables shied blocking.", "GAMEPLAY",
+                new string[] { "Enable shield blocking", "Disable shield blocking" });
+            toggleShieldBlocking.OnValueChanged += ToggleShieldBlocking_OnValueChanged;
+            
+            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block",
+                "Makes all weapons block on contact", "BUG",
+                new string[] { "Disable weapon blocking", "Enable weapon blocking" });
+            toggleAllBlocking.OnValueChanged += ToggleAllBlocking_OnValueChanged;
+            
+            var toggleNerfs = CreateSetting(SettingsInstance.SettingsType.Options, "Enables/disables nerfs.",
+                "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.", "BUG",
+                new string[] { "Enable nerfs", "Disables nerfs" });
+            toggleNerfs.OnValueChanged += ToggleNerfs_OnValueChanged;
+            
+            new GameObject
             {
                 name = "Bullshit: The Reboot",
                 hideFlags = HideFlags.HideAndDontSave
             }.AddComponent<VPSecretManager>();
             
-            var sarissaSpear = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Spear_Greek_1"));
-            if (sarissaSpear) sarissaSpear.GetComponent<Holdable>().holdableData.setRotation = false;
-            var paladinHammer = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ClericMace_1"));
-            if (paladinHammer) paladinHammer.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-            var cultistMace = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ClericMaceEvil_1"));
-            if (cultistMace) cultistMace.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-            var assassinDagger = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Assassin_Dagger_1"));
-            if (assassinDagger) assassinDagger.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-            var warGlaive = db.GetAllWeapons().ToList().Find(x => x.name.Contains("WarGlaivecurved_1"));
-            if (warGlaive) warGlaive.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-            var club = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Club_1") && !x.name.Contains("Aztec"));
-            if (club) club.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-            var superb = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_1 Weapons_VB"));
-            if (superb) superb.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
-            var superbR = db.GetAllWeapons().ToList().Find(x => x.name.Contains("Leg_SuperBoxer_W_R_1 Weapons_VB"));
-            if (superbR) superbR.GetComponent<MeleeWeapon>().requiredPowerToParry = 50f;
-            var valk = db.GetAllWeapons().ToList().Find(x => x.name.Contains("ValkyrieSword_1 Weapons_VB"));
-            if (valk) valk.GetComponent<MeleeWeapon>().requiredPowerToParry = 5f;
-
-            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
-                "Enables/disables unit modifications.", "GAMEPLAY",
-                new string[] { "Enable unit modifications", "Disable unit modifications" });
-            toggleUpgrades.OnValueChanged += ToggleUpgrades;
-            ToggleUpgrades(toggleUpgrades.defaultValue);
-            
-            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking",
-                "Enables/disables shied blocking.", "GAMEPLAY",
-                new string[] { "Enable shield blocking", "Disable shield blocking" });
-            toggleShieldBlocking.OnValueChanged += ToggleShieldBlocking;
-            ToggleShieldBlocking(toggleShieldBlocking.defaultValue);
-            
-            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block",
-                "Makes all weapons block on contact", "BUG",
-                new string[] { "Disable weapon blocking", "Enable weapon blocking" });
-            toggleAllBlocking.OnValueChanged += ToggleAllBlocking;
-            ToggleAllBlocking(toggleAllBlocking.defaultValue);
+            new Harmony("Boongus").PatchAll();
             
             var factions = db.LandfallContentDatabase.GetFactions().ToList();
             foreach (var fac in combatUpgrade.LoadAllAssets<Faction>()) {
@@ -253,7 +220,7 @@ namespace VanillaPlus {
             AddContentToDatabase();
         }
 
-        public void ToggleUpgrades(int value)
+        public static void ToggleUpgrades_OnValueChanged(int value)
         {
             if (value == 0)
             {
@@ -263,6 +230,7 @@ namespace VanillaPlus {
                     if (unit != null && unitSkeletons.ContainsKey(unit.Entity.GUID))
                     {
                         unitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        
                         var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
                             .Find(x => ((Faction)x).name == "Secret");
                         if (secret)
@@ -280,12 +248,13 @@ namespace VanillaPlus {
             {
                 foreach (var u in unitList)
                 {
-                    var unit = (UnitBlueprint)u;
+                    var unit = u;
                     if (unit != null && originalUnitSkeletons.ContainsKey(unit.Entity.GUID))
                     {
                         originalUnitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        
                         var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
-                            .Find(x => ((Faction)x).name == "Secret");
+                            .Find(x => x.name == "Secret");
                         if (secret)
                         {
                             secret.Units = (
@@ -298,8 +267,30 @@ namespace VanillaPlus {
                 }
             }
         }
+        
+        public static void TogglePhysics_OnValueChanged(int value)
+        {
+            if (value == 0)
+            {
+                foreach (var ub in unitBaseList)
+                {
+                    unitBaseSkeleton.CopyThisOntoUnitBase(ub, true);
+                }
+            }
+            else
+            {
+                foreach (var ub in unitBaseList)
+                {
+                    var guid = ub.GetComponent<Unit>().Entity.GUID;
+                    if (ub != null && originalUnitBaseSkeletons.ContainsKey(guid))
+                    {
+                        originalUnitBaseSkeletons[guid].CopyThisOntoUnitBase(ub, false, true);
+                    }
+                }
+            }
+        }
 
-        public void ToggleShieldBlocking(int value)
+        public static void ToggleShieldBlocking_OnValueChanged(int value)
         {
             if (value == 0)
             {
@@ -323,7 +314,7 @@ namespace VanillaPlus {
             }
         }
         
-        public void ToggleAllBlocking(int value)
+        public static void ToggleAllBlocking_OnValueChanged(int value)
         {
             if (value == 1)
             {
@@ -347,8 +338,13 @@ namespace VanillaPlus {
             }
         }
         
-        public SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, string[] options = null, float min = 0f, float max = 1f) {
-
+        public static void ToggleNerfs_OnValueChanged(int value)
+        {
+            ToggleNerfs = value;
+        }
+        
+        public SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, string[] options = null, float min = 0f, float max = 1f) 
+        {
             var setting = new SettingsInstance();
 
             setting.settingName = settingName;
@@ -362,20 +358,20 @@ namespace VanillaPlus {
 
             var global = ServiceLocator.GetService<GlobalSettingsHandler>();
             SettingsInstance[] listToAdd;
-            if (settingListToAddTo == "BUG") { listToAdd = global.BugsSettings; }
-            else if (settingListToAddTo == "VIDEO") { listToAdd = global.VideoSettings; }
-            else if (settingListToAddTo == "AUDIO") { listToAdd = global.AudioSettings; }
-            else if (settingListToAddTo == "CONTROLS") { listToAdd = global.ControlSettings; }
+            if (settingListToAddTo == "BUG") listToAdd = global.BugsSettings;
+            else if (settingListToAddTo == "VIDEO") listToAdd = global.VideoSettings;
+            else if (settingListToAddTo == "AUDIO") listToAdd = global.AudioSettings;
+            else if (settingListToAddTo == "CONTROLS") listToAdd = global.ControlSettings;
             else { listToAdd = global.GameplaySettings; }
 
             var list = listToAdd.ToList();
             list.Add(setting);
 
-            if (settingListToAddTo == "BUG") { typeof(GlobalSettingsHandler).GetField("m_bugsSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
-            else if (settingListToAddTo == "VIDEO") { typeof(GlobalSettingsHandler).GetField("m_videoSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
-            else if (settingListToAddTo == "AUDIO") { typeof(GlobalSettingsHandler).GetField("m_audioSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
-            else if (settingListToAddTo == "CONTROLS") { typeof(GlobalSettingsHandler).GetField("m_controlSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
-            else { typeof(GlobalSettingsHandler).GetField("m_gameplaySettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray()); }
+            if (settingListToAddTo == "BUG") typeof(GlobalSettingsHandler).GetField("m_bugsSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
+            else if (settingListToAddTo == "VIDEO") typeof(GlobalSettingsHandler).GetField("m_videoSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
+            else if (settingListToAddTo == "AUDIO") typeof(GlobalSettingsHandler).GetField("m_audioSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
+            else if (settingListToAddTo == "CONTROLS") typeof(GlobalSettingsHandler).GetField("m_controlSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
+            else typeof(GlobalSettingsHandler).GetField("m_gameplaySettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
 
             return setting;
         }
@@ -539,18 +535,22 @@ namespace VanillaPlus {
 
         public static AssetBundle combatUpgrade = AssetBundle.LoadFromMemory(Properties.Resources.combatupgrade);
 
-        private GameObject AssetPool = new GameObject();
+        public static List<UnitBlueprint> unitsToUpgrade = new List<UnitBlueprint>();
 
-        public List<UnitBlueprint> unitsToUpgrade = new List<UnitBlueprint>();
+        public static List<UnitBlueprint> unitList = new List<UnitBlueprint>();
         
-        public List<UnitBlueprint> unitsToNotUpgrade = new List<UnitBlueprint>();
+        public static List<GameObject> unitBaseList = new List<GameObject>();
+        
+        public static Dictionary<string, float> shieldWhitelist = new Dictionary<string, float>();
+        
+        public static Dictionary<DatabaseID, UnitSkeleton> unitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
+        
+        public static Dictionary<DatabaseID, UnitSkeleton> originalUnitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
 
-        public List<UnitBlueprint> unitList = new List<UnitBlueprint>();
+        public static UnitBaseSkeleton unitBaseSkeleton = new UnitBaseSkeleton();
         
-        public Dictionary<string, float> shieldWhitelist = new Dictionary<string, float>();
-        
-        public Dictionary<DatabaseID, UnitSkeleton> unitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
-        
-        public Dictionary<DatabaseID, UnitSkeleton> originalUnitSkeletons = new Dictionary<DatabaseID, UnitSkeleton>();
+        public static Dictionary<DatabaseID, UnitBaseSkeleton> originalUnitBaseSkeletons = new Dictionary<DatabaseID, UnitBaseSkeleton>();
+
+        public static int ToggleNerfs = 0;
     }
 }
