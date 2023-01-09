@@ -9,8 +9,6 @@ public class FloatyPhysics : MonoBehaviour
 
 	public AnimationCurve flightCurve;
 
-	public float deadPowerDecay = 2f;
-
 	public float heightVariance = 0.5f;
 
 	public float variationSpeed = 0.5f;
@@ -21,15 +19,9 @@ public class FloatyPhysics : MonoBehaviour
 
 	private DataHandler data;
 
-	private RigidbodyHolder rigHolder;
-
-	private float deadPower = 1f;
-
 	private Rigidbody rightFootRig;
 
 	private Rigidbody leftFootRig;
-
-	private Rigidbody hipRig;
 
 	private Rigidbody headRig;
 
@@ -57,9 +49,7 @@ public class FloatyPhysics : MonoBehaviour
 	private void Start()
 	{
 		data = base.transform.root.GetComponentInChildren<DataHandler>();
-		rigHolder = data.GetComponent<RigidbodyHolder>();
 		data.takeFallDamage = false;
-		//data.canFall = false;
 		if ((bool)data.footRight)
 		{
 			rightFootRig = data.footRight.GetComponent<Rigidbody>();
@@ -68,15 +58,9 @@ public class FloatyPhysics : MonoBehaviour
 		{
 			leftFootRig = data.footLeft.GetComponent<Rigidbody>();
 		}
-		hipRig = data.hip.GetComponent<Rigidbody>();
 		if ((bool)data.head)
 		{
 			headRig = data.head.GetComponent<Rigidbody>();
-		}
-		AnimationHandler component = data.GetComponent<AnimationHandler>();
-		if ((bool)component)
-		{
-			component.multiplier = 0.5f;
 		}
 		heightVariance *= Random.value;
 		time = Random.Range(0f, 1000f);
@@ -95,20 +79,9 @@ public class FloatyPhysics : MonoBehaviour
 		               (data.unit.unitBlueprint.sizeMultiplier >= 1.4f
 			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
 			               : 1f);
-		deadPowerDecay = 20f * data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier *
-		               (data.unit.unitBlueprint.sizeMultiplier >= 1.4f
-			               ? data.unit.unitBlueprint.sizeMultiplier * data.unit.unitBlueprint.sizeMultiplier
-			               : 1f);
 		if (data.unit.gameObject.name.Contains("Blackbeard"))
 		{
 			flightForce *= 2f * 2f * 2f;
-			deadPowerDecay = 20f * 2f * 2f * 2f;
-		}
-		if (data.unit.GetComponentInChildren<Wings>() && data.unit.GetComponentInChildren<Wings>().useWingsInPlacement)
-		{
-		
-			useWingsInPlacement = false;
-			data.unit.GetComponentInChildren<Wings>().flightForce *= 1.5f;
 		}
 	}
 
@@ -124,8 +97,8 @@ public class FloatyPhysics : MonoBehaviour
 			return;
 		}
 
-		if (!hasHalvedForce && (!data.legLeft.gameObject.activeSelf && data.legRight.gameObject.activeSelf) ||
-		    (data.legLeft.gameObject.activeSelf && !data.legRight.gameObject.activeSelf))
+		if (!hasHalvedForce && ((!data.legLeft.gameObject.activeSelf && data.legRight.gameObject.activeSelf) ||
+		    (data.legLeft.gameObject.activeSelf && !data.legRight.gameObject.activeSelf)))
 		{
 			hasHalvedForce = true;
 			flightForce *= 0.3f;

@@ -5,7 +5,6 @@ namespace VanillaPlus
 {
     public class UnitSkeleton
     {
-        
         public float health;
 
         public GameObject[] m_props;
