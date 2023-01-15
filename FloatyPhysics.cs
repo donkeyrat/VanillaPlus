@@ -116,8 +116,6 @@ public class FloatyPhysics : MonoBehaviour
 			}
 		}
 
-		bool value = data.unit.m_PreferedDistance > data.distanceToTarget;
-
 		RaycastHit hitInfo;
 		Physics.Raycast(new Ray(base.transform.position, Vector3.down), out hitInfo, distance, mask);
 		if (transform.root.GetComponent<Mount>() && transform.root.GetComponentInChildren<StandingHandler>()) transform.root.GetComponentInChildren<StandingHandler>().enabled = true;
