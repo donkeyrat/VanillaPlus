@@ -471,7 +471,6 @@
         <Compile Include="UnitBaseSkeleton.cs" />
         <Compile Include="UnitSkeleton.cs" />
         <Compile Include="VPAddEffectToTargetOnce.cs" />
-        <Compile Include="VPBinder.cs" />
         <Compile Include="VPLauncher.cs" />
         <Compile Include="VPMain.cs" />
         <Compile Include="VPExtensions.cs" />

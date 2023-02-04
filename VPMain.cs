@@ -101,29 +101,19 @@ namespace VanillaPlus
                 }
             }
 
-            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades",
-                "Enables/disables unit modifications.", "GAMEPLAY",
-                new string[] { "Enable unit modifications", "Disable unit modifications" });
+            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades", "Enables/disables unit modifications.", "GAMEPLAY", 0f, new string[] { "Enable unit modifications", "Disable unit modifications" });
             toggleUpgrades.OnValueChanged += ToggleUpgrades_OnValueChanged;
             
-            var togglePhysics = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle floaty physics",
-                "Enables/disables unit modifications.", "GAMEPLAY",
-                new string[] { "Enable floaty physics", "Disable floaty physics" });
+            var togglePhysics = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle floaty physics", "Enables/disables unit modifications.", "GAMEPLAY", 0f, new string[] { "Enable floaty physics", "Disable floaty physics" });
             togglePhysics.OnValueChanged += TogglePhysics_OnValueChanged;
             
-            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking",
-                "Enables/disables shied blocking.", "GAMEPLAY",
-                new string[] { "Enable shield blocking", "Disable shield blocking" });
+            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking", "Enables/disables shied blocking.", "GAMEPLAY", 0f, new string[] { "Enable shield blocking", "Disable shield blocking" });
             toggleShieldBlocking.OnValueChanged += ToggleShieldBlocking_OnValueChanged;
             
-            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block",
-                "Makes all weapons block on contact", "BUG",
-                new string[] { "Disable weapon blocking", "Enable weapon blocking" });
+            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block", "Makes all weapons block on contact", "BUG", 0f, new string[] { "Disable weapon blocking", "Enable weapon blocking" });
             toggleAllBlocking.OnValueChanged += ToggleAllBlocking_OnValueChanged;
             
-            var toggleNerfs = CreateSetting(SettingsInstance.SettingsType.Options, "Enables/disables nerfs.",
-                "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.", "BUG",
-                new string[] { "Enable nerfs", "Disables nerfs" });
+            var toggleNerfs = CreateSetting(SettingsInstance.SettingsType.Options, "Enables/disables nerfs.", "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.", "BUG", 0f, new string[] { "Enable nerfs", "Disables nerfs" });
             toggleNerfs.OnValueChanged += ToggleNerfs_OnValueChanged;
             
             new GameObject
@@ -220,163 +210,7 @@ namespace VanillaPlus
             AddContentToDatabase();
         }
 
-        public static void ToggleUpgrades_OnValueChanged(int value)
-        {
-            if (value == 0)
-            {
-                foreach (var u in unitList)
-                {
-                    var unit = (UnitBlueprint)u;
-                    if (unit != null && unitSkeletons.ContainsKey(unit.Entity.GUID))
-                    {
-                        unitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
-                        
-                        var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
-                            .Find(x => ((Faction)x).name == "Secret");
-                        if (secret)
-                        {
-                            secret.Units = (
-                                from UnitBlueprint uj
-                                    in secret.Units
-                                orderby uj.GetUnitCost()
-                                select uj).ToArray();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var u in unitList)
-                {
-                    var unit = u;
-                    if (unit != null && originalUnitSkeletons.ContainsKey(unit.Entity.GUID))
-                    {
-                        originalUnitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
-                        
-                        var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
-                            .Find(x => x.name == "Secret");
-                        if (secret)
-                        {
-                            secret.Units = (
-                                from UnitBlueprint uj
-                                    in secret.Units
-                                orderby uj.GetUnitCost()
-                                select uj).ToArray();
-                        }
-                    }
-                }
-            }
-        }
-        
-        public static void TogglePhysics_OnValueChanged(int value)
-        {
-            if (value == 0)
-            {
-                foreach (var ub in unitBaseList)
-                {
-                    unitBaseSkeleton.CopyThisOntoUnitBase(ub, true);
-                }
-            }
-            else
-            {
-                foreach (var ub in unitBaseList)
-                {
-                    var guid = ub.GetComponent<Unit>().Entity.GUID;
-                    if (ub != null && originalUnitBaseSkeletons.ContainsKey(guid))
-                    {
-                        originalUnitBaseSkeletons[guid].CopyThisOntoUnitBase(ub, false, true);
-                    }
-                }
-            }
-        }
-
-        public static void ToggleShieldBlocking_OnValueChanged(int value)
-        {
-            if (value == 0)
-            {
-                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
-                {
-                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
-                    {
-                        wp.AddComponent<ParryRoot>().globalCooldown = shieldWhitelist[wp.name];
-                    }
-                }
-            }
-            else
-            {
-                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
-                {
-                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
-                    {
-                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
-                    }
-                }
-            }
-        }
-        
-        public static void ToggleAllBlocking_OnValueChanged(int value)
-        {
-            if (value == 1)
-            {
-                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
-                {
-                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
-                    {
-                        wp.AddComponent<ParryRoot>();
-                    }
-                }
-            }
-            else
-            {
-                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
-                {
-                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
-                    {
-                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
-                    }
-                }
-            }
-        }
-        
-        public static void ToggleNerfs_OnValueChanged(int value)
-        {
-            ToggleNerfs = value;
-        }
-        
-        public SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, string[] options = null, float min = 0f, float max = 1f) 
-        {
-            var setting = new SettingsInstance();
-
-            setting.settingName = settingName;
-            setting.toolTip = toolTip;
-            setting.m_settingsKey = settingName;
-
-            setting.settingsType = settingsType;
-            setting.options = options;
-            setting.min = min;
-            setting.max = max;
-
-            var global = ServiceLocator.GetService<GlobalSettingsHandler>();
-            SettingsInstance[] listToAdd;
-            if (settingListToAddTo == "BUG") listToAdd = global.BugsSettings;
-            else if (settingListToAddTo == "VIDEO") listToAdd = global.VideoSettings;
-            else if (settingListToAddTo == "AUDIO") listToAdd = global.AudioSettings;
-            else if (settingListToAddTo == "CONTROLS") listToAdd = global.ControlSettings;
-            else { listToAdd = global.GameplaySettings; }
-
-            var list = listToAdd.ToList();
-            list.Add(setting);
-
-            if (settingListToAddTo == "BUG") typeof(GlobalSettingsHandler).GetField("m_bugsSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
-            else if (settingListToAddTo == "VIDEO") typeof(GlobalSettingsHandler).GetField("m_videoSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
-            else if (settingListToAddTo == "AUDIO") typeof(GlobalSettingsHandler).GetField("m_audioSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
-            else if (settingListToAddTo == "CONTROLS") typeof(GlobalSettingsHandler).GetField("m_controlSettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
-            else typeof(GlobalSettingsHandler).GetField("m_gameplaySettings", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(global, list.ToArray());
-
-            return setting;
-        }
-        
-        public void AddContentToDatabase()
+        private void AddContentToDatabase()
         {
 	        Dictionary<DatabaseID, UnityEngine.Object> nonStreamableAssets = (Dictionary<DatabaseID, UnityEngine.Object>)typeof(AssetLoader).GetField("m_nonStreamableAssets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ContentDatabase.Instance().AssetLoader);
 	        
@@ -509,6 +343,179 @@ namespace VanillaPlus
 
             
             ServiceLocator.GetService<CustomContentLoaderModIO>().QuickRefresh(WorkshopContentType.Unit, null);
+        }
+        
+        public static void ToggleUpgrades_OnValueChanged(int value)
+        {
+            if (value == 0)
+            {
+                foreach (var u in unitList)
+                {
+                    var unit = (UnitBlueprint)u;
+                    if (unit != null && unitSkeletons.ContainsKey(unit.Entity.GUID))
+                    {
+                        unitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        
+                        var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
+                            .Find(x => ((Faction)x).name == "Secret");
+                        if (secret)
+                        {
+                            secret.Units = (
+                                from UnitBlueprint uj
+                                    in secret.Units
+                                orderby uj.GetUnitCost()
+                                select uj).ToArray();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var u in unitList)
+                {
+                    var unit = u;
+                    if (unit != null && originalUnitSkeletons.ContainsKey(unit.Entity.GUID))
+                    {
+                        originalUnitSkeletons[unit.Entity.GUID].CopyThisOntoUnit(unit);
+                        
+                        var secret = ContentDatabase.Instance().LandfallContentDatabase.GetFactions().ToList()
+                            .Find(x => x.name == "Secret");
+                        if (secret)
+                        {
+                            secret.Units = (
+                                from UnitBlueprint uj
+                                    in secret.Units
+                                orderby uj.GetUnitCost()
+                                select uj).ToArray();
+                        }
+                    }
+                }
+            }
+        }
+        
+        public static void TogglePhysics_OnValueChanged(int value)
+        {
+            if (value == 0)
+            {
+                foreach (var ub in unitBaseList)
+                {
+                    unitBaseSkeleton.CopyThisOntoUnitBase(ub, true);
+                }
+            }
+            else
+            {
+                foreach (var ub in unitBaseList)
+                {
+                    var guid = ub.GetComponent<Unit>().Entity.GUID;
+                    if (ub != null && originalUnitBaseSkeletons.ContainsKey(guid))
+                    {
+                        originalUnitBaseSkeletons[guid].CopyThisOntoUnitBase(ub, false, true);
+                    }
+                }
+            }
+        }
+
+        public static void ToggleShieldBlocking_OnValueChanged(int value)
+        {
+            if (value == 0)
+            {
+                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
+                {
+                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
+                    {
+                        wp.AddComponent<ParryRoot>().globalCooldown = shieldWhitelist[wp.name];
+                    }
+                }
+            }
+            else
+            {
+                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
+                {
+                    if (shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
+                    {
+                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
+                    }
+                }
+            }
+        }
+        
+        public static void ToggleAllBlocking_OnValueChanged(int value)
+        {
+            if (value == 1)
+            {
+                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
+                {
+                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<MeleeWeapon>() && wp.GetComponent<Rigidbody>() && !wp.GetComponent<ParryRoot>())
+                    {
+                        wp.AddComponent<ParryRoot>();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
+                {
+                    if (!shieldWhitelist.ContainsKey(wp.name) && wp.GetComponent<ParryRoot>())
+                    {
+                        Object.DestroyImmediate(wp.GetComponent<ParryRoot>());
+                    }
+                }
+            }
+        }
+        
+        public static void ToggleNerfs_OnValueChanged(int value)
+        {
+            ToggleNerfs = value;
+        }
+
+        private SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, float defaultValue, string[] options = null, float min = 0f, float max = 1f) 
+        {
+            var setting = new SettingsInstance
+            {
+                settingName = settingName,
+                toolTip = toolTip,
+                m_settingsKey = settingName,
+                settingsType = settingsType,
+                options = options,
+                min = min,
+                max = max,
+                defaultValue = (int)defaultValue,
+                currentValue = (int)defaultValue,
+                defaultSliderValue = defaultValue,
+                currentSliderValue = defaultValue
+            };
+
+            var global = ServiceLocator.GetService<GlobalSettingsHandler>();
+            SettingsInstance[] listToAdd;
+            if (settingListToAddTo == "BUG") listToAdd = global.BugsSettings;
+            else if (settingListToAddTo == "VIDEO") listToAdd = global.VideoSettings;
+            else if (settingListToAddTo == "AUDIO") listToAdd = global.AudioSettings;
+            else if (settingListToAddTo == "CONTROLS") listToAdd = global.ControlSettings;
+            else listToAdd = global.GameplaySettings;
+
+            var list = listToAdd.ToList();
+            list.Add(setting);
+
+            switch (settingListToAddTo)
+            {
+                case "BUG":
+                    typeof(GlobalSettingsHandler).GetField("m_bugsSettings", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(global, list.ToArray());
+                    break;
+                case "VIDEO":
+                    typeof(GlobalSettingsHandler).GetField("m_videoSettings", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(global, list.ToArray());
+                    break;
+                case "AUDIO":
+                    typeof(GlobalSettingsHandler).GetField("m_audioSettings", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(global, list.ToArray());
+                    break;
+                case "CONTROLS":
+                    typeof(GlobalSettingsHandler).GetField("m_controlSettings", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(global, list.ToArray());
+                    break;
+                default:
+                    typeof(GlobalSettingsHandler).GetField("m_gameplaySettings", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(global, list.ToArray());
+                    break;
+            }
+
+            return setting;
         }
         
         public List<UnitBlueprint> newUnits = new List<UnitBlueprint>();
