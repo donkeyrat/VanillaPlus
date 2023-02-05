@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
+using BepInEx.Configuration;
 using DM;
 using Landfall.TABS;
 using UnityEngine;
@@ -13,14 +14,13 @@ namespace VanillaPlus {
     {
         public void Awake()
         {
-            //DoConfig();
+            DoConfig();
             StartCoroutine(LaunchMod());
         }
 		
         private static IEnumerator LaunchMod() 
         {
             yield return new WaitUntil(() => FindObjectOfType<ServiceLocator>() != null);
-            yield return new WaitUntil(() => ServiceLocator.GetService<ISaveLoaderService>() != null);
 
             new VPMain();
             
@@ -51,7 +51,25 @@ namespace VanillaPlus {
             VPMain.TogglePhysics_OnValueChanged(0);
             VPMain.ToggleShieldBlocking_OnValueChanged(0);
             VPMain.ToggleAllBlocking_OnValueChanged(0);
-            VPMain.ToggleNerfs_OnValueChanged(0);
         }
+
+        private void DoConfig()
+        {
+            ConfigUnitUpgradesEnabled = Config.Bind("Gameplay", "UnitUpgradesEnabled", true, "Enables/disables unit modifications.");
+            ConfigFloatinessEnabled = Config.Bind("Gameplay", "FloatinessEnabled", true, "Enables/disables unit modifications.");
+            ConfigShieldsBlockEnabled = Config.Bind("Gameplay", "ShieldsBlockEnabled", true, "Enables/disables shied blocking.");
+            ConfigAllWeaponsBlockEnabled = Config.Bind("Bug", "AllWeaponsBlockEnabled", false, "Enables/disables all weapons block on contact.");
+            ConfigNerfsEnabled = Config.Bind("Bug", "NerfsEnabled", true, "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.");
+        }
+
+        public static ConfigEntry<bool> ConfigUnitUpgradesEnabled;
+        
+        public static ConfigEntry<bool> ConfigFloatinessEnabled;
+
+        public static ConfigEntry<bool> ConfigShieldsBlockEnabled;
+        
+        public static ConfigEntry<bool> ConfigAllWeaponsBlockEnabled;
+        
+        public static ConfigEntry<bool> ConfigNerfsEnabled;
     }
 }

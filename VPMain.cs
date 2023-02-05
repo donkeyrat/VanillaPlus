@@ -101,20 +101,23 @@ namespace VanillaPlus
                 }
             }
 
-            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades", "Enables/disables unit modifications.", "GAMEPLAY", 0f, new string[] { "Enable unit modifications", "Disable unit modifications" });
+            var toggleUpgrades = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle unit upgrades", "Enables/disables unit modifications.", "GAMEPLAY", 0f, VPLauncher.ConfigUnitUpgradesEnabled.Value ? 0 : 1, new[] { "Enable unit modifications", "Disable unit modifications" });
             toggleUpgrades.OnValueChanged += ToggleUpgrades_OnValueChanged;
             
-            var togglePhysics = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle floaty physics", "Enables/disables unit modifications.", "GAMEPLAY", 0f, new string[] { "Enable floaty physics", "Disable floaty physics" });
+            var togglePhysics = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle floaty physics", "Enables/disables floatier unit movement.", "GAMEPLAY", 0f, VPLauncher.ConfigFloatinessEnabled.Value ? 0 : 1, new[] { "Enable floaty physics", "Disable floaty physics" });
             togglePhysics.OnValueChanged += TogglePhysics_OnValueChanged;
             
-            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking", "Enables/disables shied blocking.", "GAMEPLAY", 0f, new string[] { "Enable shield blocking", "Disable shield blocking" });
+            var toggleShieldBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle shield blocking", "Enables/disables shied blocking.", "GAMEPLAY", 0f, VPLauncher.ConfigShieldsBlockEnabled.Value ? 0 : 1, new[] { "Enable shield blocking", "Disable shield blocking" });
             toggleShieldBlocking.OnValueChanged += ToggleShieldBlocking_OnValueChanged;
             
-            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Make all weapons block", "Makes all weapons block on contact", "BUG", 0f, new string[] { "Disable weapon blocking", "Enable weapon blocking" });
+            var toggleAllBlocking = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle all weapon blocking", "Enables/disables all weapons block on contact.", "BUG", 0f, VPLauncher.ConfigAllWeaponsBlockEnabled.Value ? 0 : 1, new[] { "Disable weapon blocking", "Enable weapon blocking" });
             toggleAllBlocking.OnValueChanged += ToggleAllBlocking_OnValueChanged;
             
-            var toggleNerfs = CreateSetting(SettingsInstance.SettingsType.Options, "Enables/disables nerfs.", "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.", "BUG", 0f, new string[] { "Enable nerfs", "Disables nerfs" });
-            toggleNerfs.OnValueChanged += ToggleNerfs_OnValueChanged;
+            var toggleNerfs = CreateSetting(SettingsInstance.SettingsType.Options, "Toggle nerfs", "Enables/disables a reduction to all unit health by 30% and a reduction to invulnerability time by 50%.", "BUG", 0f, VPLauncher.ConfigNerfsEnabled.Value ? 0 : 1, new[] { "Enable nerfs", "Disables nerfs" });
+            toggleNerfs.OnValueChanged += delegate(int value)
+            {
+                VPLauncher.ConfigNerfsEnabled.Value = value == 0;
+            };
             
             new GameObject
             {
@@ -125,81 +128,77 @@ namespace VanillaPlus
             new Harmony("Boongus").PatchAll();
             
             var factions = db.LandfallContentDatabase.GetFactions().ToList();
-            foreach (var fac in combatUpgrade.LoadAllAssets<Faction>()) {
-
-                var theNew = new List<UnitBlueprint>(fac.Units);
-                var veryNewUnits = (
-                    from UnitBlueprint unit
-                        in fac.Units
-                    orderby unit.GetUnitCost()
-                    select unit).ToList();
+            foreach (var fac in combatUpgrade.LoadAllAssets<Faction>())
+            {
+                var veryNewUnits = fac.Units.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
                 fac.Units = veryNewUnits.ToArray();
-                foreach (var vFac in factions) {
-
-                    if (fac.Entity.Name == vFac.Entity.Name + "_UPGRADE") {
-
+                foreach (var vFac in factions) 
+                {
+                    if (fac.Entity.Name == vFac.Entity.Name + "_NEW") 
+                    {
                         var vFacUnits = new List<UnitBlueprint>(vFac.Units);
                         vFacUnits.AddRange(fac.Units);
-                        var newUnits = (
-                            from UnitBlueprint unit
-                                in vFacUnits
-                            orderby unit.GetUnitCost()
-                            select unit).ToList();
-                        vFac.Units = newUnits.ToArray();
-                        Object.DestroyImmediate(fac);
+                        vFac.Units = vFacUnits.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
                     }
                 }
             }
 
             foreach (var objecting in combatUpgrade.LoadAllAssets<GameObject>()) 
             {
-                if (objecting != null) {
-
+                if (objecting != null) 
+                {
                     if (objecting.GetComponent<Unit>()) newBases.Add(objecting);
-                    else if (objecting.GetComponent<WeaponItem>()) {
+                    else if (objecting.GetComponent<WeaponItem>()) 
+                    {
                         newWeapons.Add(objecting);
                         int totalSubmeshes = 0;
                         foreach (var rend in objecting.GetComponentsInChildren<MeshFilter>()) {
-                            if (rend.gameObject.activeSelf && rend.gameObject.activeInHierarchy && rend.mesh.subMeshCount > 0 && rend.GetComponent<MeshRenderer>() && rend.GetComponent<MeshRenderer>().enabled == true) {
-
+                            if (rend.gameObject.activeSelf && rend.gameObject.activeInHierarchy && rend.mesh.subMeshCount > 0 && rend.GetComponent<MeshRenderer>() && rend.GetComponent<MeshRenderer>().enabled) 
+                            {
                                 totalSubmeshes += rend.mesh.subMeshCount;
                             }
                         }
-                        foreach (var rend in objecting.GetComponentsInChildren<SkinnedMeshRenderer>()) {
-                            if (rend.gameObject.activeSelf && rend.sharedMesh.subMeshCount > 0 && rend.enabled) {
-
+                        foreach (var rend in objecting.GetComponentsInChildren<SkinnedMeshRenderer>()) 
+                        {
+                            if (rend.gameObject.activeSelf && rend.sharedMesh.subMeshCount > 0 && rend.enabled) 
+                            {
                                 totalSubmeshes += rend.sharedMesh.subMeshCount;
                             }
                         }
-                        if (totalSubmeshes != 0) {
+                        if (totalSubmeshes != 0) 
+                        {
                             float average = 1f / totalSubmeshes;
                             var averageList = new List<float>();
-                            for (int i = 0; i < totalSubmeshes; i++) { averageList.Add(average); }
+                            for (int i = 0; i < totalSubmeshes; i++) averageList.Add(average);
                             objecting.GetComponent<WeaponItem>().SubmeshArea = null;
                             objecting.GetComponent<WeaponItem>().SubmeshArea = averageList.ToArray();
                         }
                     }
                     else if (objecting.GetComponent<ProjectileEntity>()) newProjectiles.Add(objecting);
                     else if (objecting.GetComponent<SpecialAbility>()) newAbilities.Add(objecting);
-                    else if (objecting.GetComponent<PropItem>() && objecting.GetComponent<PropItem>().ShowInEditor) {
+                    else if (objecting.GetComponent<PropItem>() && objecting.GetComponent<PropItem>().ShowInEditor) 
+                    {
                         newProps.Add(objecting);
                         int totalSubmeshes = 0;
-                        foreach (var rend in objecting.GetComponentsInChildren<MeshFilter>()) {
-                            if (rend.gameObject.activeSelf && rend.gameObject.activeInHierarchy && rend.mesh.subMeshCount > 0 && rend.GetComponent<MeshRenderer>() && rend.GetComponent<MeshRenderer>().enabled == true) {
-
+                        foreach (var rend in objecting.GetComponentsInChildren<MeshFilter>()) 
+                        {
+                            if (rend.gameObject.activeSelf && rend.gameObject.activeInHierarchy && rend.mesh.subMeshCount > 0 && rend.GetComponent<MeshRenderer>() && rend.GetComponent<MeshRenderer>().enabled) 
+                            {
                                 totalSubmeshes += rend.mesh.subMeshCount;
                             }
                         }
-                        foreach (var rend in objecting.GetComponentsInChildren<SkinnedMeshRenderer>()) {
-                            if (rend.gameObject.activeSelf && rend.sharedMesh.subMeshCount > 0 && rend.enabled) {
-
+                        foreach (var rend in objecting.GetComponentsInChildren<SkinnedMeshRenderer>()) 
+                        {
+                            if (rend.gameObject.activeSelf && rend.sharedMesh.subMeshCount > 0 && rend.enabled) 
+                            {
                                 totalSubmeshes += rend.sharedMesh.subMeshCount;
                             }
                         }
-                        if (totalSubmeshes != 0) {
+                        if (totalSubmeshes != 0) 
+                        {
                             float average = 1f / totalSubmeshes;
                             var averageList = new List<float>();
-                            for (int i = 0; i < totalSubmeshes; i++) { averageList.Add(average); }
+                            for (int i = 0; i < totalSubmeshes; i++) averageList.Add(average);
                             objecting.GetComponent<PropItem>().SubmeshArea = null;
                             objecting.GetComponent<PropItem>().SubmeshArea = averageList.ToArray();
                         }
@@ -212,7 +211,7 @@ namespace VanillaPlus
 
         private void AddContentToDatabase()
         {
-	        Dictionary<DatabaseID, UnityEngine.Object> nonStreamableAssets = (Dictionary<DatabaseID, UnityEngine.Object>)typeof(AssetLoader).GetField("m_nonStreamableAssets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ContentDatabase.Instance().AssetLoader);
+	        Dictionary<DatabaseID, Object> nonStreamableAssets = (Dictionary<DatabaseID, UnityEngine.Object>)typeof(AssetLoader).GetField("m_nonStreamableAssets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(ContentDatabase.Instance().AssetLoader);
 	        
             var db = ContentDatabase.Instance().LandfallContentDatabase;
             
@@ -347,6 +346,8 @@ namespace VanillaPlus
         
         public static void ToggleUpgrades_OnValueChanged(int value)
         {
+            VPLauncher.ConfigUnitUpgradesEnabled.Value = value == 0;
+            
             if (value == 0)
             {
                 foreach (var u in unitList)
@@ -395,6 +396,8 @@ namespace VanillaPlus
         
         public static void TogglePhysics_OnValueChanged(int value)
         {
+            VPLauncher.ConfigFloatinessEnabled.Value = value == 0;
+            
             if (value == 0)
             {
                 foreach (var ub in unitBaseList)
@@ -417,6 +420,8 @@ namespace VanillaPlus
 
         public static void ToggleShieldBlocking_OnValueChanged(int value)
         {
+            VPLauncher.ConfigShieldsBlockEnabled.Value = value == 0;
+            
             if (value == 0)
             {
                 foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
@@ -441,6 +446,8 @@ namespace VanillaPlus
         
         public static void ToggleAllBlocking_OnValueChanged(int value)
         {
+            VPLauncher.ConfigAllWeaponsBlockEnabled.Value = value == 1;
+            
             if (value == 1)
             {
                 foreach (var wp in ContentDatabase.Instance().LandfallContentDatabase.GetWeapons().ToList())
@@ -462,13 +469,8 @@ namespace VanillaPlus
                 }
             }
         }
-        
-        public static void ToggleNerfs_OnValueChanged(int value)
-        {
-            ToggleNerfs = value;
-        }
 
-        private SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, float defaultValue, string[] options = null, float min = 0f, float max = 1f) 
+        private SettingsInstance CreateSetting(SettingsInstance.SettingsType settingsType, string settingName, string toolTip, string settingListToAddTo, float defaultValue, float currentValue, string[] options = null, float min = 0f, float max = 1f) 
         {
             var setting = new SettingsInstance
             {
@@ -480,9 +482,9 @@ namespace VanillaPlus
                 min = min,
                 max = max,
                 defaultValue = (int)defaultValue,
-                currentValue = (int)defaultValue,
+                currentValue = (int)currentValue,
                 defaultSliderValue = defaultValue,
-                currentSliderValue = defaultValue
+                currentSliderValue = currentValue
             };
 
             var global = ServiceLocator.GetService<GlobalSettingsHandler>();
@@ -558,6 +560,6 @@ namespace VanillaPlus
         
         public static Dictionary<DatabaseID, UnitBaseSkeleton> originalUnitBaseSkeletons = new Dictionary<DatabaseID, UnitBaseSkeleton>();
 
-        public static int ToggleNerfs = 0;
+        public static bool NerfsEnabled => VPLauncher.ConfigNerfsEnabled.Value;
     }
 }
