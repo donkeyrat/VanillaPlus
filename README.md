@@ -61,14 +61,17 @@ Minor balancing changes may not be noted.
 | **Monk** | The Monk now swings its staff more gracefully and is more agile overall, but has less health. |
 | **Monkey King** | The Monkey King swings its staff more gracefully, and can spawn clones when hitting the ground. Its clones now have a 50% chance of summoning clones of their own. It now costs 3000. |
 | **Fencer** | The Fencer's dodge has been tweaked, and its fighting style has been improved. |
+| **Halberd** | The Halberd now holds its weapon more accurately, and sweeps it to the side. |
 | **Captain** | The Captain is now taller, and aims its flintlock more effectively. Its sword has received a fighting style rework as well, and its health has been increased. It now costs 1800. |
 | **Pirate Queen** | The Pirate Queen has received a health nerf. |
 | **Vampire** | The Vampire has received a new hair model and bat model. The bat also properly looks at enemy units rather than being jittery. Moreover, its human and bat forms have received black and red eyes. It now costs 300. |
 | **Swordcaster** | The Swordcaster's clothes have been recolored and its bowlcut has been replaced with blue fire hair. Its eyes now glow and its sword also glows, and has an on-hit effect. In addition, its swords go through shields and armor, and cannot be blocked by most projectile blocking units. |
 | **Boxer** | The Boxer now has a block, and is more effective at taking down stronger units with more health, while much worse at dealing with crowds. In addition, its health has been increased. |
+| ***SUPER BOXER*** | The Super Boxer's special ability has been removed. It now flies forward while punching more and generally has better accuracy, and more health. |
 | ***DARK PEASANT*** | The Dark Peasant has received a complete revamp; it has new clothing, abilities, and weapons. It now uses orbs to attack, and its hands have been de-emphasized. At long ranges it can summon beams of darkness on enemies. When it takes a lot of damage, it can release a burst of spikes and darkness from itself. When it dies, it turns to dust. |
 | ***SUPER PEASANT*** | The Super Peasant has received some light visual tweaks as well as a speed nerf and a new ability, which causes it to duplicate every few moments. When it dies, it explodes into light. |
 | **Teacher** | The Teacher's clothing coloring has been fixed, and it can now parry more weapons than the upgraded Squires. It has a much better fighting style as well. It now costs 500. |
+| ***ICE GIANT*** | The Ice Giant has received a visual upgrade, and its punches are more impactful and freeze units. The ice breath also takes longer to activate. |
 
 ## Changelog
 
@@ -133,14 +136,25 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Reworked the Snake Archer.
  - Tweaked the Sarissa.
  - Tweaked the Shield Bearer.
+ 
+ ## 2.2.0
+
+ - Added a setting to toggle a nerf to every unit's health.
+ - Added setting saving.
+ - Reworked the Halberd.
+ - Reworked the Super Boxer.
+ - Reworked the Ice Giant.
+ - Tweaked the Minotaur.
+ - Tweaked the Squire.
+ - Rebalanced numerous units.
 
 ## Credits
 
 This mod was created by Team Grad, an ambitious mod team that aims to improve the game through adding a plethora of new content.
 
-**BD - Coder, Creator**
+**BD - Coder/Owner**
 
-**Terren - Modeler**
+**Terren - Modeler/Icon Artist**
 
 **DoorKnob - Icon Artist**
 

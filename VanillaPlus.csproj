@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>VanillaPlus</RootNamespace>
         <AssemblyName>VanillaPlus</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -180,6 +180,9 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
+        <Reference Include="TGCore">
+          <HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Totally Accurate Battle Simulator\BepInEx\plugins\TGCore.dll</HintPath>
+        </Reference>
         <Reference Include="udpkit">
           <HintPath>..\..\..\..\Program Files (x86)\Steam\steamapps\common\Totally Accurate Battle Simulator\TotallyAccurateBattleSimulator_Data\Managed\udpkit.dll</HintPath>
         </Reference>
@@ -462,22 +465,16 @@
         <Compile Include="HarmonyPatches\AbyssalPatch.cs" />
         <Compile Include="HarmonyPatches\HealthNerfPatch.cs" />
         <Compile Include="HarmonyPatches\InvulnerabilityNerfPatch.cs" />
-        <Compile Include="KillYourself.cs" />
         <Compile Include="MasterBolt.cs" />
         <Compile Include="ParryRoot.cs" />
-        <Compile Include="RandomizeParticleSeed.cs" />
         <Compile Include="SpawnFloatyPhysics.cs" />
         <Compile Include="Superimage.cs" />
         <Compile Include="UnitBaseSkeleton.cs" />
         <Compile Include="UnitSkeleton.cs" />
-        <Compile Include="VPAddEffectToTargetOnce.cs" />
         <Compile Include="VPLauncher.cs" />
         <Compile Include="VPMain.cs" />
         <Compile Include="VPExtensions.cs" />
-	<Compile Include="FloatyPhysics.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="VPMaterialEvent.cs" />
-        <Compile Include="VPMaterialEventTeamColor.cs" />
 	<Compile Include="VPSecretManager.cs" />
         <Compile Include="Properties\Resources.Designer.cs">
           <AutoGen>True</AutoGen>
