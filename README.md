@@ -159,6 +159,10 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Tweaked the Ice Giant's stance.
  - Fixed the Ice Giant having no outline.
  - Fixed custom units that use items from the mod not loading properly.
+ 
+ ### 2.2.2
+ 
+ - Fixed a problem with the Thunderstore page.
 
 ## Credits
 
