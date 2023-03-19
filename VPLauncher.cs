@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace VanillaPlus 
 {
-    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.1.0")]
+    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.2.0")]
     [BepInDependency("teamgrad.core")]
     public class VPLauncher : TGMod 
     {
