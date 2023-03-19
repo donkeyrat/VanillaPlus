@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace VanillaPlus 
 {
-    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.2.2")]
+    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.2.4")]
     [BepInDependency("teamgrad.core")]
     public class VPLauncher : TGMod 
     {

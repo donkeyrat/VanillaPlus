@@ -164,6 +164,15 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  
  - Fixed a problem with the Thunderstore page.
 
+ ### 2.2.3
+ 
+ - Fixed nothing appearing in the Unit Creator.
+ 
+ ### 2.2.4
+ 
+ - Fixed the Ice Giant lacking team color.
+ - Fixed the Dark Peasant's flaming hair not appearing in the proper faction.
+
 ## Credits
 
 This mod was created by Team Grad, an ambitious mod team that aims to improve the game through adding a plethora of new content.

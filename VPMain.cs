@@ -143,9 +143,9 @@ namespace VanillaPlus
             TGAddons.AddItems(combatUpgrade.LoadAllAssets<UnitBlueprint>(), combatUpgrade.LoadAllAssets<Faction>(),
                 combatUpgrade.LoadAllAssets<TABSCampaignAsset>(), combatUpgrade.LoadAllAssets<TABSCampaignLevelAsset>(),
                 combatUpgrade.LoadAllAssets<VoiceBundle>(), combatUpgrade.LoadAllAssets<FactionIcon>(),
-                combatUpgrade.LoadAllAssets<Unit>().Where(x => !x.name.Contains("2.0")), combatUpgrade.LoadAllAssets<PropItem>(),
-                combatUpgrade.LoadAllAssets<SpecialAbility>(), combatUpgrade.LoadAllAssets<WeaponItem>(),
-                combatUpgrade.LoadAllAssets<ProjectileEntity>());
+                combatUpgrade.LoadAllAssets<GameObject>().Select(x => x.GetComponent<Unit>()), combatUpgrade.LoadAllAssets<GameObject>().Select(x => x.GetComponent<PropItem>()),
+                combatUpgrade.LoadAllAssets<GameObject>().Select(x => x.GetComponent<SpecialAbility>()), combatUpgrade.LoadAllAssets<GameObject>().Select(x => x.GetComponent<WeaponItem>()),
+                combatUpgrade.LoadAllAssets<GameObject>().Select(x => x.GetComponent<ProjectileEntity>()));
         }
         
         public static void ToggleUpgrades_OnValueChanged(int value)
