@@ -5,10 +5,11 @@ using BepInEx.Configuration;
 using Landfall.TABS;
 using TGCore;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace VanillaPlus 
 {
-    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.2.0")]
+    [BepInPlugin("teamgrad.vanillaplus", "VanillaPlus", "2.2.1")]
     [BepInDependency("teamgrad.core")]
     public class VPLauncher : TGMod 
     {
@@ -69,6 +70,34 @@ namespace VanillaPlus
             {
                 ConfigNerfsEnabled.Value = value == 0;
             };
+        }
+
+        public override void SceneManager(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            if (scene.name == "02_Lvl1_Farmer_VC")
+            {
+                var secrets = new GameObject()
+                {
+                    name = "Secrets"
+                };
+                Instantiate(VPMain.combatUpgrade.LoadAsset<GameObject>("SkewerThrower_Unlock"), secrets.transform, true);
+            }
+            if (scene.name == "05_Lvl2_Medieval_VC")
+            {
+                var secrets = new GameObject()
+                {
+                    name = "Secrets"
+                };
+                Instantiate(VPMain.combatUpgrade.LoadAsset<GameObject>("Marauder_Unlock"), secrets.transform, true);
+            }
+            if (scene.name == "05_AsiaTemple_VC")
+            {
+                var secrets = new GameObject()
+                {
+                    name = "Secrets"
+                };
+                Instantiate(VPMain.combatUpgrade.LoadAsset<GameObject>("Nunchaku_Unlock"), secrets.transform, true);
+            }
         }
 
         public static ConfigEntry<bool> ConfigUnitUpgradesEnabled;

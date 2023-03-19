@@ -2,5 +2,7 @@
 
 namespace VanillaPlus
 {
-    public class Abyssal : MonoBehaviour { }
+    public class Abyssal : MonoBehaviour 
+    { 
+    }
 }

@@ -475,7 +475,6 @@
         <Compile Include="VPMain.cs" />
         <Compile Include="VPExtensions.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-	<Compile Include="VPSecretManager.cs" />
         <Compile Include="Properties\Resources.Designer.cs">
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>

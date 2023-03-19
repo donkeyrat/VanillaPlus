@@ -73,7 +73,7 @@ namespace VanillaPlus
             unit1.minSizeRandom = unit2.minSizeRandom;
             unit1.maxSizeRandom = unit2.maxSizeRandom;
             unit1.UnitBase = unit2.UnitBase;
-            if (unit2.Name != "") unit1.Entity.Name = unit2.Name;
+            if (unit2.Name != string.Empty) unit1.Entity.Name = unit2.Name;
         }
 
         public void CopyUnitOntoThis(UnitBlueprint unit2)
@@ -100,7 +100,7 @@ namespace VanillaPlus
             unit1.minSizeRandom = unit2.minSizeRandom;
             unit1.maxSizeRandom = unit2.maxSizeRandom;
             unit1.UnitBase = unit2.UnitBase;
-            if (unit2.Entity.Name != "") unit1.Name = unit2.Entity.Name;
+            if (unit2.Entity.Name != string.Empty) unit1.Name = unit2.Entity.Name;
         }
     }
 }

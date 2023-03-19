@@ -21,8 +21,7 @@ namespace VanillaPlus
             unitList = TGMain.landfallDb.GetUnitBlueprints().ToList();
             unitsToUpgrade = new List<UnitBlueprint>(unitList.FindAll(x => x != null && x.UnitBase != null && (x.UnitBase && (x.UnitBase.name.Contains("Humanoid") || x.UnitBase.name.Contains("Stiffy") || x.UnitBase.name.Contains("Halfling") || x.UnitBase.name.Contains("Blackbeard")))));
 
-            unitBaseSkeleton.CopyUnitBaseOntoThis(combatUpgrade
-                .LoadAsset<GameObject>("Humanoid_2.0"));
+            unitBaseSkeleton.CopyUnitBaseOntoThis(combatUpgrade.LoadAsset<GameObject>("Humanoid_2.0"));
             
             shieldWhitelist.Add("Shield_Tower_1 Weapons_VB", 2f);
             shieldWhitelist.Add("Ra_Shield", 0.5f);
@@ -91,26 +90,21 @@ namespace VanillaPlus
                 }
             }
             
-            new GameObject
-            {
-                name = "Bullshit: The Reboot",
-                hideFlags = HideFlags.HideAndDontSave
-            }.AddComponent<VPSecretManager>();
-            
             new Harmony("VanillaPlus").PatchAll();
 
-            foreach (var fac in combatUpgrade.LoadAllAssets<Faction>())
+            foreach (var faction in combatUpgrade.LoadAllAssets<Faction>())
             {
-                var veryNewUnits = fac.Units.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
-                fac.Units = veryNewUnits.ToArray();
-                foreach (var vFac in TGMain.landfallDb.GetFactions().ToList()) 
+                var moddedUnitList = faction.Units.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
+                faction.Units = moddedUnitList.ToArray();
+                foreach (var vanillaFaction in TGMain.landfallDb.GetFactions().ToList()) 
                 {
-                    if (fac.Entity.Name == vFac.Entity.Name + "_NEW") 
+                    if (faction.Entity.Name == vanillaFaction.Entity.Name + "_NEW")
                     {
-                        var vFacUnits = new List<UnitBlueprint>(vFac.Units);
-                        vFacUnits.AddRange(fac.Units);
-                        vFac.Units = vFacUnits.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
-                        Object.DestroyImmediate(fac);
+                        var vanillaUnitList = new List<UnitBlueprint>(vanillaFaction.Units);
+                        vanillaUnitList.AddRange(faction.Units);
+                        vanillaFaction.Units = vanillaUnitList.Where(x => x).OrderBy(x => x.GetUnitCost()).ToArray();
+
+                        Object.DestroyImmediate(faction);
                     }
                 }
             }

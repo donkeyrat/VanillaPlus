@@ -145,10 +145,19 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
  - Reworked the Halberd.
  - Reworked the Super Boxer.
  - Reworked the Ice Giant.
+ - Rebalanced numerous units.
  - Tweaked the Minotaur.
  - Tweaked the Squire.
- - Rebalanced numerous units.
  - Fixed lag when floaty units get frozen.
+ 
+ ### 2.2.1
+
+ - Fixed revamped units having improper localization.
+ - Tweaked the Ice Giant's frost breath.
+ - Tweaked the Ice Giant's aim.
+ - Tweaked the Ice Giant's stance.
+ - Fixed the Ice Giant having no outline.
+ - Fixed custom units that use items from the mod not loading properly.
 
 ## Credits
 
