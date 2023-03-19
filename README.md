@@ -141,6 +141,7 @@ The mod's [**Github**](https://github.com/donkeyrat/VanillaPlus) is now the only
 
  - Added TGCore as a dependency.
  - Added a setting to toggle a nerf to every unit's health.
+ - Added a setting to toggle unit floatiness.
  - Added setting saving.
  - Reworked the Halberd.
  - Reworked the Super Boxer.
