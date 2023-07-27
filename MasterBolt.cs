@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -100,15 +101,8 @@ public class MasterBolt : ProjectileHitEffect
 
 	private void CheckAchievements()
 	{
-		AchievementService service = ServiceLocator.GetService<AchievementService>();
-		int num = 0;
-		foreach (DataHandler hitUnit in hitUnits)
-		{
-			if (hitUnit.Dead)
-			{
-				num++;
-			}
-		}
+		var service = ServiceLocator.GetService<AchievementService>();
+		var num = hitUnits.Count(hitUnit => hitUnit.Dead);
 		if (num >= 20)
 		{
 			service.UnlockAchievement("ZEUS_KILL_UNITS");
